@@ -1366,13 +1366,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672132684192680180}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.008639302, y: 0, z: 0, w: 0.9999627}
-  m_LocalPosition: {x: 0, y: 1.55, z: -4.57}
+  m_LocalRotation: {x: 0.058870837, y: 0, z: 0, w: 0.9982656}
+  m_LocalPosition: {x: -0, y: 2.04, z: -4.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4154421629489162483}
-  m_LocalEulerAnglesHint: {x: 0.99, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 6.75, y: 0, z: 0}
 --- !u!20 &2360753163252158266
 Camera:
   m_ObjectHideFlags: 0
@@ -1406,7 +1406,7 @@ Camera:
     height: 1
   near clip plane: 0.5
   far clip plane: 10000
-  field of view: 60
+  field of view: 75
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2549,9 +2549,9 @@ GameObject:
   - component: {fileID: 8752443180475348811}
   - component: {fileID: 7757570539930093695}
   - component: {fileID: 5678176744169666199}
-  - component: {fileID: 610006607323569862}
+  - component: {fileID: 1390048454200134717}
   m_Layer: 0
-  m_Name: AICar
+  m_Name: CarAgent
   m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2741,7 +2741,7 @@ MonoBehaviour:
   m_RaysPerDirection: 4
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
-  m_RayLength: 100
+  m_RayLength: 45
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -2797,8 +2797,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   carController: {fileID: 7609150626709668969}
-  Checkpoints:
-  - {fileID: 0}
+  environmentController: {fileID: 0}
+  startingPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &7757570539930093695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2829,7 +2829,7 @@ MonoBehaviour:
   NumStepsToRecord: 0
   DemonstrationName: 
   DemonstrationDirectory: 
---- !u!114 &610006607323569862
+--- !u!114 &1390048454200134717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2838,23 +2838,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 3581184136390756080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Script: {fileID: 11500000, guid: b88c49fedb0b39b4bb25ddcfff7ea7f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SensorName: CPRayPerceptionSensor
-  m_DetectableTags: []
-  m_RaysPerDirection: 2
-  m_MaxRayDegrees: 45
-  m_SphereCastRadius: 0.2
-  m_RayLength: 100
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  m_ObservationStacks: 1
-  rayHitColor: {r: 0, g: 1, b: 0, a: 1}
-  rayMissColor: {r: 0, g: 0.33333334, b: 0, a: 1}
-  m_StartVerticalOffset: 1
-  m_EndVerticalOffset: 1
+  rb: {fileID: 7469902511119863876}
+  viewAngle: 45
+  carController: {fileID: 0}
+  path: []
+  arriveDistance: 1.5
+  currentTarget: {fileID: 0}
+  startIndex: 0
+  showNextStop: 0
+  showNextFinish: 0
+  showTarget: 0
+  showCarDetection: 0
+  currentSpeed: 0
 --- !u!1 &3738663881319850371
 GameObject:
   m_ObjectHideFlags: 0

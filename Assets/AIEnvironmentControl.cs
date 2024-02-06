@@ -1,15 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
-using Random = UnityEngine.Random;
 
-public class AutoCarControl : MonoBehaviour
+public class AIEnvironmentControl : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody rb;
-    [SerializeField]
-    private float stopDistance = 10f;
     [SerializeField]
     private float viewAngle = 45f;
     [SerializeField]
@@ -17,13 +15,11 @@ public class AutoCarControl : MonoBehaviour
     [SerializeField]
     private List<Target> path = null;
     [SerializeField]
-    private List<int> validSpawns = null;
-    [SerializeField]
     private float arriveDistance = 1.5f;
     [SerializeField]
     private Target currentTarget;
     [SerializeField]
-    private int startIndex = -1;
+    private int startIndex = 0;
     [SerializeField]
     private bool showNextStop, showNextFinish, showTarget, showCarDetection;
 
@@ -34,15 +30,14 @@ public class AutoCarControl : MonoBehaviour
     private Target activeFinish;
     private Target nextStop;
     private bool started = false;
-    [SerializeField]
-    public float steer = 0, accelerate = 0, brake = 0;
+    private bool reachedTarget = false;
 
     public float currentSpeed = 0;
-    
+
 
     private void Start()
     {
-  
+
     }
 
     private void Setup()
@@ -53,13 +48,12 @@ public class AutoCarControl : MonoBehaviour
             return;
         }
 
-        index = (startIndex >= 0) ? validSpawns[startIndex] : validSpawns[Random.Range(0, validSpawns.Count - 1)];
+        index = startIndex;
 
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        rb.velocity = rb.angularVelocity = Vector3.zero;
 
         // Start the car at a random target location
-        transform.position = path[index].GetCoords() + new Vector3(0,0.5f,0);
+        transform.position = path[index].GetCoords() + new Vector3(0, 0.5f, 0);
 
         // Calculate the direction to the next target
         Vector3 direction = path[index + 1].GetCoords() - path[index].GetCoords();
@@ -71,13 +65,14 @@ public class AutoCarControl : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
         currentTarget = path[index];
+        currentTarget.GetComponent<MeshRenderer>().enabled = true;
 
-        if(nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
-        nextStop = GetNextStop();
+        if (nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
+        nextStop = NextStop();
 
         nextStop.waiting++;
 
-        activeFinish = GetActiveFinish();
+        activeFinish = ActiveFinish();
         activeFinish.active++;
     }
 
@@ -103,13 +98,11 @@ public class AutoCarControl : MonoBehaviour
             Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), targetRelativeDirection.normalized * distanceToTarget, new Color(0, 0, 1f));
         }
 
-        Drive();
         CheckIfArrived();
     }
-    
+
     private void FixedUpdate()
     {
-        carController.Move(steer, accelerate, accelerate, brake);
     }
 
     private void ResetTargets()
@@ -130,8 +123,7 @@ public class AutoCarControl : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            ResetTargets();
-            Setup();
+            Restart();
         }
 
     }
@@ -140,16 +132,23 @@ public class AutoCarControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Car"))
         {
-            ResetTargets();
-            Setup();
+            Restart();
         }
+    }
+
+    public void Restart()
+    {
+        if (currentTarget != null) currentTarget.GetComponent<MeshRenderer>().enabled = false;
+        ResetTargets();
+        Setup();
+
     }
 
     private void CheckIfArrived()
     {
-        Target nextFinish = GetNextFinish();
-        if (!currentTarget.stop 
-            && (!currentTarget.stopPoint || nextFinish.active < nextFinish.carLimit) 
+        Target nextFinish = NextFinish();
+        if (!currentTarget.stop
+            && (!currentTarget.stopPoint || nextFinish.active < nextFinish.carLimit)
             && Vector3.Distance(currentTarget.GetCoords(), transform.position) < arriveDistance)
         {
             if (currentTarget.stopPoint)
@@ -158,7 +157,7 @@ public class AutoCarControl : MonoBehaviour
                 activeStop.waiting = (int)MathF.Max(0, activeStop.waiting - 1);
                 activeStop.active++;
                 activeFinish.active = (int)MathF.Max(0, activeFinish.active - 1);
-                activeFinish = GetNextFinish();
+                activeFinish = NextFinish();
                 activeFinish.active++;
             }
 
@@ -166,11 +165,27 @@ public class AutoCarControl : MonoBehaviour
             {
                 activeStop.active = (int)MathF.Max(0, activeStop.active - 1);
                 activeStop = null;
-                nextStop = GetNextStop();
+                nextStop = NextStop();
                 nextStop.waiting++;
             }
 
+            currentTarget.GetComponent<MeshRenderer>().enabled = false;
+            reachedTarget = true;
             SetNextTargetIndex();
+            currentTarget.GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
+
+    public bool CheckReachedTarget()
+    {
+        if (reachedTarget)
+        {
+            reachedTarget = false;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -180,99 +195,17 @@ public class AutoCarControl : MonoBehaviour
         return Mathf.Max(0, rb.velocity.magnitude - body.velocity.magnitude) * 2.23693629f;
     }
 
-    private void Drive()
+    private Target NextStop()
     {
-        accelerate = 1;
-        brake = 0;
-        steer = 0;
-
-        currentSpeed = carController.CurrentSpeed;
-
-        Target nextStop = GetNextStop();
-        Target nextFinish = GetNextFinish();
-
-        Vector3 targetLocalPosition = transform.InverseTransformPoint(currentTarget.GetCoords());
-        Vector3 stopLocalPosition = transform.InverseTransformPoint(nextStop.GetCoords());
-        Vector3 finishLocalPosition = transform.InverseTransformPoint(nextFinish.GetCoords());
-        Vector3 targetRelativeDirection = nextStop.GetCoords() - transform.position;
-
-        // Use FindNearestVehicle() to get the position of the nearest vehicle
-        GameObject nearest = FindNearestVehicleInfront();
-        // Calculate the distance to the nearest vehicle
-        float distanceToNearestVehicle = (nearest != null) ? Vector3.Distance(transform.position, nearest.transform.position) : Mathf.Infinity;
-
-        float distanceToStop = stopLocalPosition.magnitude;
-        float distanceToFinish = finishLocalPosition.magnitude;
-        float brakeDistance = currentSpeed + currentSpeed*currentSpeed/carController.MaxSpeed;
-
-        if ((distanceToStop > 25f || nextStop.slow || nextStop.stop || (nextStop.stopPoint && nextFinish.active >= nextFinish.carLimit)) 
-            && distanceToStop < distanceToNearestVehicle 
-            && distanceToNearestVehicle > stopDistance
-            || distanceToStop < 15 && currentSpeed > 12.5)
-        {
-            if (distanceToStop <= 2.5f)
-            {
-                brake = 1;
-                accelerate = 0;
-                if (showNextStop) Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), targetRelativeDirection.normalized * distanceToStop, new(1f, 0, 0));
-            }
-            else if (distanceToStop <= brakeDistance && currentSpeed > 0)
-            {
-                //accelerate = (currentSpeed < distanceToNearestVehicle) ? 0 : -1 + (brakeDistance / currentSpeed);
-                accelerate = -1 + (distanceToStop / brakeDistance);
-                if (showNextStop) Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), targetRelativeDirection.normalized * distanceToStop, new(0, 1f, 0));
-            }
-        }
-        else if (nearest != null)
-        {
-            Rigidbody nearestBody = nearest.GetComponent<Rigidbody>();
-            float speedTowards = CalculateRelativeSpeedTowards(nearestBody);
-            Vector3 directionToNearestVehicle = (nearest.transform.position - transform.position).normalized;
-
-            if (distanceToNearestVehicle <= stopDistance)
-            {
-                brake = 1;
-                accelerate = 0;
-                if(showCarDetection) Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), directionToNearestVehicle * distanceToNearestVehicle, new(1, 0, 0));
-            }
-            else if (distanceToNearestVehicle <= brakeDistance && speedTowards > 0)
-            {
-                accelerate = -1 + (distanceToNearestVehicle / brakeDistance);
-                if (showCarDetection) Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), directionToNearestVehicle * distanceToNearestVehicle, new(1, 1, 0));
-            }
-
-        }
-
-        float angle = Mathf.Atan2(targetLocalPosition.x, targetLocalPosition.z) * Mathf.Rad2Deg;
-        float finishAngle = Mathf.Atan2(finishLocalPosition.x, finishLocalPosition.z) * Mathf.Rad2Deg;
-
-        float ratio = 0.35f;
-        if (angle > 0) steer = (angle > 90f) ? 1 : ratio + (1-ratio) * (angle / 90f);
-        if (angle < 0) steer = (angle < -90f) ? 1 : -ratio + (1 - ratio) * (angle / 90f);
-
-        if (showNextFinish) Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), (nextFinish.transform.position - transform.position).normalized * Vector3.Distance(transform.position, nextFinish.transform.position), new(1, 0, 1));
-
-        if (MathF.Abs(angle) > 35 && currentSpeed > 12.5 || currentSpeed > 8 && MathF.Abs(finishAngle) > 35 && distanceToFinish < 15)
-        {
-            brake = 0;
-            accelerate = -1;
-        } 
-
-        //steer = (angle > turningAngleOffset) ? 1 : ((angle < -turningAngleOffset) ? -1 : 0);
-        //steer *= (angle > hardSteerLimit) ? hardRotateAmount : rotateAmount;
-    }
-
-    private Target GetNextStop()
-    {
-        for (int i = index; i < path.Count + index ; i++)
+        for (int i = index; i < path.Count + index; i++)
         {
             int current = i % path.Count;
             if (path[current].stopPoint) return path[current];
         }
         return null;
     }
-
-    private Target GetNextFinish()
+      
+    private Target NextFinish()
     {
         for (int i = index; i < path.Count + index; i++)
         {
@@ -281,14 +214,14 @@ public class AutoCarControl : MonoBehaviour
         }
         return null;
     }
-    
-    private Target GetActiveFinish()
+
+    private Target ActiveFinish()
     {
         for (int i = 0; i < path.Count; i++)
         {
             int current = (path.Count + index - 1 - i) % path.Count;
             if (path[current].finishedPoint) return path[current];
-            if (path[current].stopPoint) return GetNextFinish();
+            if (path[current].stopPoint) return NextFinish();
         }
         return null;
     }
