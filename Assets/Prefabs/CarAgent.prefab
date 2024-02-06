@@ -2797,8 +2797,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   carController: {fileID: 7609150626709668969}
-  environmentController: {fileID: 0}
-  startingPosition: {x: 0, y: 0, z: 0}
+  environmentController: {fileID: 1390048454200134717}
 --- !u!114 &7757570539930093695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2846,13 +2845,13 @@ MonoBehaviour:
   carController: {fileID: 0}
   path: []
   arriveDistance: 1.5
-  currentTarget: {fileID: 0}
   startIndex: 0
   showNextStop: 0
   showNextFinish: 0
   showTarget: 0
   showCarDetection: 0
   currentSpeed: 0
+  currentTarget: {fileID: 0}
 --- !u!1 &3738663881319850371
 GameObject:
   m_ObjectHideFlags: 0

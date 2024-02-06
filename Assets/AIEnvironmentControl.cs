@@ -17,8 +17,6 @@ public class AIEnvironmentControl : MonoBehaviour
     [SerializeField]
     private float arriveDistance = 1.5f;
     [SerializeField]
-    private Target currentTarget;
-    [SerializeField]
     private int startIndex = 0;
     [SerializeField]
     private bool showNextStop, showNextFinish, showTarget, showCarDetection;
@@ -33,6 +31,7 @@ public class AIEnvironmentControl : MonoBehaviour
     private bool reachedTarget = false;
 
     public float currentSpeed = 0;
+    public Target currentTarget;
 
 
     private void Start()
