@@ -30,8 +30,11 @@ public class AIEnvironmentControl : MonoBehaviour
     private bool started = false;
     private bool reachedTarget = false;
 
+    public bool finished = false;
     public float currentSpeed = 0;
     public Target currentTarget;
+    public Target nextTarget;
+    public float steer = 0, accelerate = 0, brake = 0;
 
 
     private void Start()
@@ -47,6 +50,7 @@ public class AIEnvironmentControl : MonoBehaviour
             return;
         }
 
+        finished = false;
         index = startIndex;
 
         rb.velocity = rb.angularVelocity = Vector3.zero;
@@ -64,6 +68,7 @@ public class AIEnvironmentControl : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
         currentTarget = path[index];
+        nextTarget = path[(index + 1) % path.Count];
         currentTarget.GetComponent<MeshRenderer>().enabled = true;
 
         if (nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
@@ -102,6 +107,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        carController.Move(steer, accelerate, accelerate, brake);
     }
 
     private void ResetTargets()
@@ -319,8 +325,14 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void SetNextTargetIndex()
     {
-        index = (index + 1) % path.Count;
+        index = index + 1;
+        if (index == path.Count)
+        {
+            finished = true;
+            index = 0;
+        }
         currentTarget = path[index];
+        nextTarget = path[(index + 1) % path.Count];
     }
 
 }

@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 5499961,
+                "file_path": "results\\Test\\SelfDrive\\SelfDrive-5499961.onnx",
+                "reward": 16.337523950503606,
+                "creation_time": 1707296879.7099566,
+                "auxillary_file_paths": [
+                    "results\\Test\\SelfDrive\\SelfDrive-5499961.pt"
+                ]
+            },
+            {
+                "steps": 5999937,
+                "file_path": "results\\Test\\SelfDrive\\SelfDrive-5999937.onnx",
+                "reward": 14.648460119542941,
+                "creation_time": 1707299191.7751021,
+                "auxillary_file_paths": [
+                    "results\\Test\\SelfDrive\\SelfDrive-5999937.pt"
+                ]
+            },
+            {
+                "steps": 6499909,
+                "file_path": "results\\Test\\SelfDrive\\SelfDrive-6499909.onnx",
+                "reward": 16.786053558735,
+                "creation_time": 1707301518.7104921,
+                "auxillary_file_paths": [
+                    "results\\Test\\SelfDrive\\SelfDrive-6499909.pt"
+                ]
+            },
+            {
+                "steps": 6999914,
+                "file_path": "results\\Test\\SelfDrive\\SelfDrive-6999914.onnx",
+                "reward": 15.831963666847773,
+                "creation_time": 1707303873.250225,
+                "auxillary_file_paths": [
+                    "results\\Test\\SelfDrive\\SelfDrive-6999914.pt"
+                ]
+            },
+            {
+                "steps": 7369220,
+                "file_path": "results\\Test\\SelfDrive\\SelfDrive-7369220.onnx",
+                "reward": 16.141241033871967,
+                "creation_time": 1707305748.9362721,
+                "auxillary_file_paths": [
+                    "results\\Test\\SelfDrive\\SelfDrive-7369220.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 7369220,
+            "file_path": "results\\Test\\SelfDrive.onnx",
+            "reward": 16.141241033871967,
+            "creation_time": 1707305748.9362721,
+            "auxillary_file_paths": [
+                "results\\Test\\SelfDrive\\SelfDrive-7369220.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

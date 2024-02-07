@@ -2763,8 +2763,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 7
+    NumStackedVectorObservations: 3
     m_ActionSpec:
       m_NumContinuousActions: 3
       BranchSizes: 
@@ -2774,7 +2774,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: My Behavior
   TeamId: 0
   m_UseChildSensors: 1
@@ -2842,7 +2842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 7469902511119863876}
   viewAngle: 45
-  carController: {fileID: 0}
+  carController: {fileID: 7609150626709668969}
   path: []
   arriveDistance: 1.5
   startIndex: 0
@@ -2852,6 +2852,9 @@ MonoBehaviour:
   showCarDetection: 0
   currentSpeed: 0
   currentTarget: {fileID: 0}
+  steer: 0
+  accelerate: 0
+  brake: 0
 --- !u!1 &3738663881319850371
 GameObject:
   m_ObjectHideFlags: 0
