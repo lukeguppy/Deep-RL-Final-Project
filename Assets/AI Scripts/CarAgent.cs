@@ -9,6 +9,8 @@ using static UnityEngine.GraphicsBuffer;
 using System.Collections;
 using UnityEditor.Rendering;
 using System;
+using System.Transactions;
+using Unity.VisualScripting;
 
 public class CarAgent : Agent
 {
@@ -18,6 +20,19 @@ public class CarAgent : Agent
     private AIEnvironmentControl environmentController;
 
     private bool collided = false;
+    private Target currentTarget;
+    private Target nextTarget;
+
+    private Vector3 directionToTarget;
+    private Vector3 directionToNextTarget;
+
+    private float targetAngle;
+    private float nextTargetAngle;
+
+    private float targetDistance;
+    private float nextTargetDistance;
+
+    private float forwardSpeed;
 
     public override void Initialize() {
         carController = GetComponent<CarController>();
@@ -26,6 +41,17 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin() {
         environmentController.Restart();
         collided = false;
+        currentTarget = environmentController.currentTarget;
+        nextTarget = environmentController.nextTarget;
+
+        directionToTarget = currentTarget.transform.position - transform.position;
+        directionToNextTarget = nextTarget.transform.position - transform.position;
+
+        targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
+        nextTargetAngle = Vector3.SignedAngle(transform.forward, directionToNextTarget, Vector3.up);
+
+        targetAngle = Mathf.Repeat(targetAngle + 180f, 360f) - 180f;
+        nextTargetAngle = Mathf.Repeat(nextTargetAngle + 180f, 360f) - 180f;
     } 
 
     public override void OnActionReceived(ActionBuffers actions) {
@@ -35,43 +61,66 @@ public class CarAgent : Agent
 
         // Control the car using the received actions
         environmentController.accelerate = acceleration;
-        environmentController.brake = 0;
+        environmentController.brake = brake >= 0.25 ? brake : 0;
         environmentController.steer = steering;
 
         float reward = CalculateReward();
-        AddReward(reward);
-        Debug.Log(steering + " " + acceleration + " " + brake + "   " + reward);
 
-        if (collided) {
-            SetReward(-1);
+        if (collided)
+        {
+            reward = -10f;
+            Debug.Log(GetCumulativeReward());
             EndEpisode();
-            collided = false;         
+            GetCumulativeReward();
+            collided = false;
         }
+
+        //Debug.Log($"{steering,14}" + " " + $"{acceleration,14}" + " " + $"{environmentController.brake,10}" + "         Reward: " + $"{reward,10}" + "    Speed: "+ $"{forwardSpeed,10}");
+        //Debug.Log("Speed: " + forwardSpeed);
+
+        AddReward(reward);
 
         if (environmentController.finished)
         {
+            Debug.Log(GetCumulativeReward());
             EndEpisode();
         }
     }
 
     public override void CollectObservations(VectorSensor sensor) {
-        Target currentTarget = environmentController.currentTarget;
-        Target nextTarget = environmentController.nextTarget;
+        forwardSpeed = carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 0 ? 1 : -1);
 
-        Vector3 directionToTarget = currentTarget.transform.position - transform.position;
-        Vector3 directionToNextTarget = currentTarget.transform.position - transform.position;
-        float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
-        float nextTargetAngle = Vector3.SignedAngle(transform.forward, directionToNextTarget, Vector3.up);
+        currentTarget = environmentController.currentTarget;
+        nextTarget = environmentController.nextTarget;
+
+        directionToTarget = currentTarget.transform.position - transform.position;
+        directionToNextTarget = nextTarget.transform.position - transform.position;
+
+        targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
+        nextTargetAngle = Vector3.SignedAngle(transform.forward, directionToNextTarget, Vector3.up);
+
         targetAngle = Mathf.Repeat(targetAngle + 180f, 360f) - 180f;
         nextTargetAngle = Mathf.Repeat(nextTargetAngle + 180f, 360f) - 180f;
 
-        sensor.AddObservation(targetAngle);
+        targetDistance = Vector3.Distance(transform.position, currentTarget.transform.position);
+        nextTargetDistance = Vector3.Distance(transform.position, nextTarget.transform.position);
+
+        Vector2 target1Vector = new(targetAngle, targetDistance);
+        Vector2 target2Vector = new(nextTargetAngle, nextTargetDistance);
+
+        //Debug.Log(targetAngle);
+
+        //if (Math.Abs(targetAngle) > 160) EndEpisode();
+
+        /*sensor.AddObservation(targetAngle);
         sensor.AddObservation(Vector3.Distance(transform.position, currentTarget.transform.position));
         sensor.AddObservation(nextTargetAngle);
-        sensor.AddObservation(Vector3.Distance(transform.position, nextTarget.transform.position));
+        sensor.AddObservation(Vector3.Distance(transform.position, nextTarget.transform.position));*/
+        sensor.AddObservation(target1Vector);
+        sensor.AddObservation(target2Vector);
         sensor.AddObservation(currentTarget.stop);
         sensor.AddObservation(currentTarget.slow);
-        sensor.AddObservation(carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 1 ? 1 : -1)); // current speed (neg if reversing)
+        sensor.AddObservation(forwardSpeed); // current speed (neg if reversing)
 
     }
 
@@ -82,17 +131,18 @@ public class CarAgent : Agent
     // Implement custom reward calculation logic here
     private float CalculateReward() {
         float reward = -0.1f;
-        float forwardSpeed = carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 1 ? 1 : -1);
-        Target currentTarget = environmentController.currentTarget;
-        Vector3 directionToTarget = currentTarget.transform.position - transform.position;
-        float targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
-        targetAngle = Mathf.Repeat(targetAngle + 180f, 360f) - 180f;
 
-        if (forwardSpeed > 0f) reward += 0.05f;
-        if (forwardSpeed < 0f) reward -= 0.1f;
-        reward -= 0.25f * Math.Abs(targetAngle / 180f);
+        reward += Math.Min(forwardSpeed / 100f, 0.05f); 
 
-        reward = environmentController.CheckReachedTarget() ? 10 : reward;
+        reward += 1 / (targetDistance + 2.5f); 
+        
+        //reward = collided ? -1f : reward;
+
+        //if (forwardSpeed > 1f) reward += 0.1f;
+        if (forwardSpeed < 0f) reward -= 0.5f;
+        reward -= 0.5f * Math.Abs(targetAngle / 180f);
+
+        reward += environmentController.CheckReachedTarget() ? 25 : reward;
 
         return reward;
     }
@@ -100,6 +150,9 @@ public class CarAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut) {
         // This function is used to test the agent manually in the Unity Editor.
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        //continuousActions[0] = CrossPlatformInputManager.GetAxis("Horizontal");
+        //continuousActions[1] = CrossPlatformInputManager.GetAxis("Vertical");
+        //continuousActions[2] = CrossPlatformInputManager.GetAxis("Jump");
 
         continuousActions[0] = Input.GetAxis("Horizontal");
         continuousActions[1] = Input.GetAxis("Vertical");

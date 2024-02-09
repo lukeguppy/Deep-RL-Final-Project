@@ -47,7 +47,12 @@ public class JunctionController : MonoBehaviour
         for (int i = 0; i < stopPoints.Length; i++)
         {
             Target current = stopPoints[i];
-            current.GetComponent<MeshRenderer>().material = current.stop ? stopMaterial : (current.slow) ? slowMaterial : goMaterial;
+            if (showStopPoints)
+            {
+                MeshRenderer meshRenderer = current.GetComponent<MeshRenderer>();
+                meshRenderer.material = current.stop ? stopMaterial : current.slow ? slowMaterial : goMaterial;
+                //meshRenderer.enabled = current.waiting + current.active > 0;
+            }
             active += current.active;
         }
 

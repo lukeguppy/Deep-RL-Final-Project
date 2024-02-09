@@ -353,7 +353,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -655,7 +655,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1076,7 +1076,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
@@ -1249,7 +1249,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1343,7 +1343,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
@@ -1444,7 +1444,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1528,7 +1528,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1741,7 +1741,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
@@ -1842,7 +1842,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2162,7 +2162,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
@@ -2382,7 +2382,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2481,7 +2481,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
@@ -2585,7 +2585,7 @@ PrefabInstance:
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7400779470287077149, guid: 18b350ecfdb9d70449018e6f2b14ab46,
         type: 3}

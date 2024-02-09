@@ -10885,6 +10885,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 252624703}
     m_Modifications:
+    - target: {fileID: -8108028926083326893, guid: 2d388afeceb04d44881004986d2a7de9,
+        type: 3}
+      propertyPath: m_ObservationStacks
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 318862804268231131, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_IsActive
@@ -11200,6 +11205,21 @@ PrefabInstance:
       propertyPath: DemonstrationDirectory
       value: demos
       objectReference: {fileID: 0}
+    - target: {fileID: 7609150626709668969, guid: 2d388afeceb04d44881004986d2a7de9,
+        type: 3}
+      propertyPath: m_Topspeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7609150626709668969, guid: 2d388afeceb04d44881004986d2a7de9,
+        type: 3}
+      propertyPath: m_Downforce
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7609150626709668969, guid: 2d388afeceb04d44881004986d2a7de9,
+        type: 3}
+      propertyPath: m_BrakeTorque
+      value: 2500
+      objectReference: {fileID: 0}
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_BehaviorName
@@ -11208,7 +11228,7 @@ PrefabInstance:
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_BehaviorType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}

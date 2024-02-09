@@ -126,19 +126,19 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Wall"))
+        /*if (other.CompareTag("Wall"))
         {
             Restart();
-        }
+        }*/
 
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Car"))
+       /* if (collision.gameObject.CompareTag("Car"))
         {
             Restart();
-        }
+        }*/
     }
 
     public void Restart()
