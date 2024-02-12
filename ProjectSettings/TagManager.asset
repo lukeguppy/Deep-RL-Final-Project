@@ -8,6 +8,7 @@ TagManager:
   - Checkpoint
   - Target
   - Car
+  - OOB
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Wall
   - Water
   - UI
-  - Checkpoint
+  - OOB
   - 
   - 
   - 

@@ -20,11 +20,12 @@ public class CarAgent : Agent
     private AIEnvironmentControl environmentController;
 
     private bool collided = false;
+    private bool oob = false;
     private Target currentTarget;
     private Target nextTarget;
 
-    private Vector3 directionToTarget;
-    private Vector3 directionToNextTarget;
+    private Vector2 directionToTarget;
+    private Vector2 directionToNextTarget;
 
     private float targetAngle;
     private float nextTargetAngle;
@@ -32,7 +33,13 @@ public class CarAgent : Agent
     private float targetDistance;
     private float nextTargetDistance;
 
-    private float forwardSpeed;
+    private float forwardVelocity;
+
+    private float steer, accelerate, brake = 0;
+
+    private float currentReward = 0;
+    private float previousStateReward = 0;
+    private float statesSinceAction = 0;
 
     public override void Initialize() {
         carController = GetComponent<CarController>();
@@ -40,7 +47,7 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin() {
         environmentController.Restart();
-        collided = false;
+        collided = oob = false;
         currentTarget = environmentController.currentTarget;
         nextTarget = environmentController.nextTarget;
 
@@ -52,100 +59,127 @@ public class CarAgent : Agent
 
         targetAngle = Mathf.Repeat(targetAngle + 180f, 360f) - 180f;
         nextTargetAngle = Mathf.Repeat(nextTargetAngle + 180f, 360f) - 180f;
-    } 
+    }
+    
+    // Implement custom reward calculation logic here
+    private float CalculateReward()
+    {
+        float stateReward = 0f;
+        float angleWeight = 3;
+        float distanceWeight = 1;
+        float speedWeight = 0;
+        float weightSum = angleWeight + distanceWeight + speedWeight;
+
+        //stateReward -= targetAngle == 0 ? 0 : angleWeight/weightSum * (float)Math.Pow(Math.Abs(targetAngle / 180f), 1.5f);
+
+        stateReward -= angleWeight / weightSum * Math.Abs(targetAngle / 180f);
+
+        stateReward -= distanceWeight / weightSum * (targetDistance / environmentController.DistanceBetweenTargets());
+
+        stateReward += speedWeight / weightSum * forwardVelocity / carController.MaxSpeed;
+
+        return stateReward + 0.2f;
+    }
+
+    private void FixedUpdate()
+    {
+
+
+    }
 
     public override void OnActionReceived(ActionBuffers actions) {
-        float steering = actions.ContinuousActions[0];
-        float acceleration = actions.ContinuousActions[1];
-        float brake = actions.ContinuousActions[2];
+        steer = actions.ContinuousActions[0];
+        accelerate = actions.ContinuousActions[1];
+        brake = actions.ContinuousActions[2] >= 0.5f ? actions.ContinuousActions[2] : 0;
 
-        // Control the car using the received actions
-        environmentController.accelerate = acceleration;
-        environmentController.brake = brake >= 0.25 ? brake : 0;
-        environmentController.steer = steering;
+        carController.Move(steer, accelerate, accelerate, brake);
 
-        float reward = CalculateReward();
+        currentReward = CalculateReward();
 
         if (collided)
         {
-            reward = -10f;
+            currentReward -= 10f;
+            SetReward(-10f);
+            EndEpisode();
+            collided = false;
+            return;
+        }
+
+        if (oob)
+        {
+            SetReward(-100f);
             Debug.Log(GetCumulativeReward());
             EndEpisode();
-            GetCumulativeReward();
-            collided = false;
+            oob = false;
+        }
+
+        if (StepCount > 50000)
+        {
+            SetReward(-50f);
+            EndEpisode();
         }
 
         //Debug.Log($"{steering,14}" + " " + $"{acceleration,14}" + " " + $"{environmentController.brake,10}" + "         Reward: " + $"{reward,10}" + "    Speed: "+ $"{forwardSpeed,10}");
         //Debug.Log("Speed: " + forwardSpeed);
 
-        AddReward(reward);
+        if (environmentController.CheckReachedTarget())
+        {
+            currentReward += 100;
+        }
+
+        //AddReward(100*(currentReward - previousStateReward));
+        //Debug.Log(StepCount + ":   " + 100 * (currentReward - previousStateReward));
+        AddReward(currentReward);
+        Debug.Log(StepCount + ":   " + currentReward);
 
         if (environmentController.finished)
         {
-            Debug.Log(GetCumulativeReward());
             EndEpisode();
         }
+
+        previousStateReward = currentReward;
     }
 
     public override void CollectObservations(VectorSensor sensor) {
-        forwardSpeed = carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 0 ? 1 : -1);
+        forwardVelocity = carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 0 ? 1 : -1);
 
         currentTarget = environmentController.currentTarget;
         nextTarget = environmentController.nextTarget;
 
-        directionToTarget = currentTarget.transform.position - transform.position;
-        directionToNextTarget = nextTarget.transform.position - transform.position;
+        directionToTarget = new(currentTarget.transform.position.x - transform.position.x, currentTarget.transform.position.z - transform.position.z);
+        directionToNextTarget = new(nextTarget.transform.position.x - transform.position.x, nextTarget.transform.position.z - transform.position.z);
 
-        targetAngle = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
-        nextTargetAngle = Vector3.SignedAngle(transform.forward, directionToNextTarget, Vector3.up);
+        targetAngle = Vector2.SignedAngle(transform.forward, directionToTarget);
+        nextTargetAngle = Vector2.SignedAngle(transform.forward, directionToNextTarget);
 
         targetAngle = Mathf.Repeat(targetAngle + 180f, 360f) - 180f;
         nextTargetAngle = Mathf.Repeat(nextTargetAngle + 180f, 360f) - 180f;
 
-        targetDistance = Vector3.Distance(transform.position, currentTarget.transform.position);
-        nextTargetDistance = Vector3.Distance(transform.position, nextTarget.transform.position);
+        targetDistance = Vector2.Distance(transform.position, currentTarget.transform.position);
+        nextTargetDistance = Vector2.Distance(transform.position, nextTarget.transform.position);
 
-        Vector2 target1Vector = new(targetAngle, targetDistance);
-        Vector2 target2Vector = new(nextTargetAngle, nextTargetDistance);
+        Vector2 target1Info = new(targetAngle, targetDistance);
+        Vector2 target2Info = new(nextTargetAngle, nextTargetDistance);
 
-        //Debug.Log(targetAngle);
-
-        //if (Math.Abs(targetAngle) > 160) EndEpisode();
-
-        /*sensor.AddObservation(targetAngle);
-        sensor.AddObservation(Vector3.Distance(transform.position, currentTarget.transform.position));
-        sensor.AddObservation(nextTargetAngle);
-        sensor.AddObservation(Vector3.Distance(transform.position, nextTarget.transform.position));*/
-        sensor.AddObservation(target1Vector);
-        sensor.AddObservation(target2Vector);
+        sensor.AddObservation(target1Info);
+        sensor.AddObservation(target2Info);
         sensor.AddObservation(currentTarget.stop);
         sensor.AddObservation(currentTarget.slow);
-        sensor.AddObservation(forwardSpeed); // current speed (neg if reversing)
+        sensor.AddObservation(forwardVelocity);
+        sensor.AddObservation(collided);
 
     }
 
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("Wall")) collided = true;
+        if (other.CompareTag("OOB")) oob = true;
     }
 
-    // Implement custom reward calculation logic here
-    private float CalculateReward() {
-        float reward = -0.1f;
-
-        reward += Math.Min(forwardSpeed / 100f, 0.05f); 
-
-        reward += 1 / (targetDistance + 2.5f); 
-        
-        //reward = collided ? -1f : reward;
-
-        //if (forwardSpeed > 1f) reward += 0.1f;
-        if (forwardSpeed < 0f) reward -= 0.5f;
-        reward -= 0.5f * Math.Abs(targetAngle / 180f);
-
-        reward += environmentController.CheckReachedTarget() ? 25 : reward;
-
-        return reward;
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Wall")) collided = false;
     }
+
 
     public override void Heuristic(in ActionBuffers actionsOut) {
         // This function is used to test the agent manually in the Unity Editor.

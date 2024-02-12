@@ -34,7 +34,6 @@ public class AIEnvironmentControl : MonoBehaviour
     public float currentSpeed = 0;
     public Target currentTarget;
     public Target nextTarget;
-    public float steer = 0, accelerate = 0, brake = 0;
 
 
     private void Start()
@@ -66,6 +65,12 @@ public class AIEnvironmentControl : MonoBehaviour
 
         // Apply the rotation around the Y-axis to face the next target
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        // Get the new forward vector based on the rotation
+        Vector3 newForwardDirection = transform.forward;
+
+        // Update the forward vector of the object
+        transform.forward = newForwardDirection;
 
         currentTarget = path[index];
         nextTarget = path[(index + 1) % path.Count];
@@ -105,10 +110,6 @@ public class AIEnvironmentControl : MonoBehaviour
         CheckIfArrived();
     }
 
-    private void FixedUpdate()
-    {
-        carController.Move(steer, accelerate, accelerate, brake);
-    }
 
     private void ResetTargets()
     {
@@ -147,6 +148,12 @@ public class AIEnvironmentControl : MonoBehaviour
         ResetTargets();
         Setup();
 
+    }
+
+    public float DistanceBetweenTargets()
+    {
+        int previousIndex = index == 0 ? (path.Count + index - 2) % path.Count : (path.Count + index - 1) % path.Count;
+        return Vector3.Distance(currentTarget.transform.position, path[previousIndex].transform.position);
     }
 
     private void CheckIfArrived()
