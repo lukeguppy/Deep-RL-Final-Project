@@ -23,7 +23,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private GameObject[] otherCars;
 
-    private int index = 0;
+    public int index = 0;
     private Target activeStop;
     private Target activeFinish;
     private Target nextStop;
@@ -332,7 +332,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void SetNextTargetIndex()
     {
-        index = index + 1;
+        index++;
         if (index == path.Count)
         {
             finished = true;

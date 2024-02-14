@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 4161304,
+                "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4161304.onnx",
+                "reward": 559.2425420851935,
+                "creation_time": 1707876046.207766,
+                "auxillary_file_paths": [
+                    "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4161304.pt"
+                ]
+            },
+            {
+                "steps": 4499872,
+                "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4499872.onnx",
+                "reward": 480.23323495047435,
+                "creation_time": 1707881157.6742892,
+                "auxillary_file_paths": [
+                    "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4499872.pt"
+                ]
+            },
+            {
+                "steps": 4999922,
+                "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4999922.onnx",
+                "reward": 579.4154277801514,
+                "creation_time": 1707883510.4228644,
+                "auxillary_file_paths": [
+                    "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-4999922.pt"
+                ]
+            },
+            {
+                "steps": 5001383,
+                "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-5001383.onnx",
+                "reward": 579.2473369945179,
+                "creation_time": 1707883577.152996,
+                "auxillary_file_paths": [
+                    "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-5001383.pt"
+                ]
+            },
+            {
+                "steps": 5021962,
+                "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-5021962.onnx",
+                "reward": null,
+                "creation_time": 1707884504.0124323,
+                "auxillary_file_paths": [
+                    "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-5021962.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5021962,
+            "file_path": "results\\NewRewardsChangeDistanceNegReward\\SelfDrive.onnx",
+            "reward": null,
+            "creation_time": 1707884504.0124323,
+            "auxillary_file_paths": [
+                "results\\NewRewardsChangeDistanceNegReward\\SelfDrive\\SelfDrive-5021962.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 465496,
+                "file_path": "results\\NewSystemAttempt1\\SelfDrive\\SelfDrive-465496.onnx",
+                "reward": 184.64220875707167,
+                "creation_time": 1707893415.4124644,
+                "auxillary_file_paths": [
+                    "results\\NewSystemAttempt1\\SelfDrive\\SelfDrive-465496.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 465496,
+            "file_path": "results\\NewSystemAttempt1\\SelfDrive.onnx",
+            "reward": 184.64220875707167,
+            "creation_time": 1707893415.4124644,
+            "auxillary_file_paths": [
+                "results\\NewSystemAttempt1\\SelfDrive\\SelfDrive-465496.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}
