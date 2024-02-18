@@ -55,7 +55,7 @@ public class AIEnvironmentControl : MonoBehaviour
         rb.velocity = rb.angularVelocity = Vector3.zero;
 
         // Start the car at a random target location
-        transform.position = path[index].GetCoords() + new Vector3(0, 0.5f, 0);
+        transform.position = path[index].GetCoords() + new Vector3(5f, 0.5f, 0);
 
         // Calculate the direction to the next target
         Vector3 direction = path[index + 1].GetCoords() - path[index].GetCoords();
