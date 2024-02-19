@@ -2,58 +2,58 @@
     "SelfDrive": {
         "checkpoints": [
             {
-                "steps": 1542348,
-                "file_path": "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1542348.onnx",
-                "reward": 307.49660757313603,
-                "creation_time": 1708116910.4643648,
+                "steps": 3499616,
+                "file_path": "results\\4-256WORKING\\SelfDrive\\SelfDrive-3499616.onnx",
+                "reward": 246.92710494995117,
+                "creation_time": 1708301061.9461737,
                 "auxillary_file_paths": [
-                    "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1542348.pt"
+                    "results\\4-256WORKING\\SelfDrive\\SelfDrive-3499616.pt"
                 ]
             },
             {
-                "steps": 1551564,
-                "file_path": "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1551564.onnx",
-                "reward": 281.69197877248126,
-                "creation_time": 1708262816.0890837,
+                "steps": 3717543,
+                "file_path": "results\\4-256WORKING\\SelfDrive\\SelfDrive-3717543.onnx",
+                "reward": 1058.8688720703126,
+                "creation_time": 1708302181.7242641,
                 "auxillary_file_paths": [
-                    "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1551564.pt"
+                    "results\\4-256WORKING\\SelfDrive\\SelfDrive-3717543.pt"
                 ]
             },
             {
-                "steps": 1855093,
-                "file_path": "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1855093.onnx",
-                "reward": null,
-                "creation_time": 1708264332.9766529,
+                "steps": 3791837,
+                "file_path": "results\\4-256WORKING\\SelfDrive\\SelfDrive-3791837.onnx",
+                "reward": 1087.1880073547363,
+                "creation_time": 1708302734.6713207,
                 "auxillary_file_paths": [
-                    "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1855093.pt"
+                    "results\\4-256WORKING\\SelfDrive\\SelfDrive-3791837.pt"
                 ]
             },
             {
-                "steps": 1883469,
-                "file_path": "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1883469.onnx",
-                "reward": 402.73116629464283,
-                "creation_time": 1708264585.8589537,
+                "steps": 3999032,
+                "file_path": "results\\4-256WORKING\\SelfDrive\\SelfDrive-3999032.onnx",
+                "reward": 1323.5768636067708,
+                "creation_time": 1708303905.4033034,
                 "auxillary_file_paths": [
-                    "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1883469.pt"
+                    "results\\4-256WORKING\\SelfDrive\\SelfDrive-3999032.pt"
                 ]
             },
             {
-                "steps": 1934663,
-                "file_path": "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1934663.onnx",
-                "reward": null,
-                "creation_time": 1708265127.5943964,
+                "steps": 4010226,
+                "file_path": "results\\4-256WORKING\\SelfDrive\\SelfDrive-4010226.onnx",
+                "reward": 1274.6687344637785,
+                "creation_time": 1708303905.9179287,
                 "auxillary_file_paths": [
-                    "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1934663.pt"
+                    "results\\4-256WORKING\\SelfDrive\\SelfDrive-4010226.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 1934663,
-            "file_path": "results\\4-256PositiveRewards2\\SelfDrive.onnx",
-            "reward": null,
-            "creation_time": 1708265127.5943964,
+            "steps": 4010226,
+            "file_path": "results\\4-256WORKING\\SelfDrive.onnx",
+            "reward": 1274.6687344637785,
+            "creation_time": 1708303905.9179287,
             "auxillary_file_paths": [
-                "results\\4-256PositiveRewards2\\SelfDrive\\SelfDrive-1934663.pt"
+                "results\\4-256WORKING\\SelfDrive\\SelfDrive-4010226.pt"
             ]
         }
     },

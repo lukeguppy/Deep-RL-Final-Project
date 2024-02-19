@@ -105,18 +105,32 @@ public class CarAgent : Agent
         //Debug.Log((((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance))));
         stateReward += (((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance)));
 
+        if (forwardVelocity < 0) stateReward -= 0.1f;
+
         previousNormalisedDistance = normalisedDistance;
 
         return stateReward;
     }
 
-    public override void OnActionReceived(ActionBuffers actions) {
+    private void FixedUpdate()
+    {
+
+        //carController.Move(0, 1, 1, 0);
+        carController.Move(steer, accelerate, accelerate, brake);
+        Debug.Log($"Moved: {steer,-10:F2} {accelerate,-11:F2} {brake,-6:F2}");
+
+
+    }
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
         steer = actions.ContinuousActions[0];
         accelerate = actions.ContinuousActions[1];
         brake = actions.ContinuousActions[2] >= 0.5f ? actions.ContinuousActions[2] : 0;
 
         // Drive
-        carController.Move(steer, accelerate, accelerate, brake);
+        //carController.Move(steer, accelerate, accelerate, brake);
+        //Debug.Log("Moved: " + steer + "   " + accelerate + "   " + brake);
 
         // UPDATE VALUES
         currentTarget = environmentController.currentTarget;
@@ -187,13 +201,13 @@ public class CarAgent : Agent
 
         if (environmentController.finished)
         {
+            Debug.Log(GetCumulativeReward());
             EndEpisode();
         }
 
     }
 
     public override void CollectObservations(VectorSensor sensor) {
-
 
         Vector2 target1Info = new(targetAngle, targetDistance);
         Vector2 target2Info = new(nextTargetAngle, nextTargetDistance);

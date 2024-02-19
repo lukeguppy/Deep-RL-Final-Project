@@ -35846,11 +35846,17 @@ PrefabInstance:
       propertyPath: m_BrakeTorque
       value: 2500
       objectReference: {fileID: 0}
+    - target: {fileID: 8752443180475348811, guid: 2d388afeceb04d44881004986d2a7de9,
+        type: 3}
+      propertyPath: MaxStep
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: b45d4a358dc20264eaf242bb449f162f,
+        type: 3}
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_BehaviorName
@@ -35864,7 +35870,7 @@ PrefabInstance:
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_InferenceDevice
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8838901068101409390, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}

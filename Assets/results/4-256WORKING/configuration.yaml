@@ -7,12 +7,12 @@ behaviors:
       buffer_size: 50000
       learning_rate: 0.0003
       beta: 0.003
-      epsilon: 0.3
+      epsilon: 0.25
       lambd: 0.97
       num_epoch: 10
       shared_critic: false
-      learning_rate_schedule: constant
-      beta_schedule: constant
+      learning_rate_schedule: linear
+      beta_schedule: linear
       epsilon_schedule: linear
     network_settings:
       normalize: false
@@ -24,7 +24,7 @@ behaviors:
       deterministic: false
     reward_signals:
       extrinsic:
-        gamma: 0.99
+        gamma: 0.97
         strength: 1.0
         network_settings:
           normalize: false
@@ -35,7 +35,7 @@ behaviors:
           goal_conditioning_type: hyper
           deterministic: false
       gail:
-        gamma: 0.99
+        gamma: 0.97
         strength: 0.1
         network_settings:
           normalize: false
@@ -50,23 +50,10 @@ behaviors:
         use_actions: false
         use_vail: false
         demo_path: C:\Users\lukew\Project\Car Simulation\demos\InitialRecording.demo
-      curiosity:
-        gamma: 0.99
-        strength: 0.1
-        network_settings:
-          normalize: false
-          hidden_units: 256
-          num_layers: 2
-          vis_encode_type: simple
-          memory: null
-          goal_conditioning_type: hyper
-          deterministic: false
-        learning_rate: 0.0003
-        encoding_size: 256
     init_path: null
     keep_checkpoints: 5
     checkpoint_interval: 500000
-    max_steps: 100000000
+    max_steps: 4000000
     time_horizon: 8192
     summary_freq: 20000
     threaded: true
@@ -86,13 +73,13 @@ engine_settings:
   width: 84
   height: 84
   quality_level: 5
-  time_scale: 2.0
+  time_scale: 5.0
   target_frame_rate: -1
   capture_frame_rate: 60
   no_graphics: false
 environment_parameters: null
 checkpoint_settings:
-  run_id: 4-256PositiveRewards2
+  run_id: 4-256WORKING
   initialize_from: null
   load_model: false
   resume: true
