@@ -1,0 +1,29 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 13252,
+                "file_path": "results\\4-256PositiveSAC\\SelfDrive\\SelfDrive-13252.onnx",
+                "reward": null,
+                "creation_time": 1708321298.5888612,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveSAC\\SelfDrive\\SelfDrive-13252.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 13252,
+            "file_path": "results\\4-256PositiveSAC\\SelfDrive.onnx",
+            "reward": null,
+            "creation_time": 1708321298.5888612,
+            "auxillary_file_paths": [
+                "results\\4-256PositiveSAC\\SelfDrive\\SelfDrive-13252.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

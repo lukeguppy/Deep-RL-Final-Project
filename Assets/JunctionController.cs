@@ -40,7 +40,7 @@ public class JunctionController : MonoBehaviour
         if (!started)
         {
             stopPoints[0].stop = false;
-            for (int i = 1; i < stopPoints.Length; i++) stopPoints[i].stop = true;
+            for (int i = 1; i < stopPoints.Length; i++) stopPoints[i].stop = false;
             started = true;
         }
 
@@ -51,12 +51,12 @@ public class JunctionController : MonoBehaviour
             {
                 MeshRenderer meshRenderer = current.GetComponent<MeshRenderer>();
                 meshRenderer.material = current.stop ? stopMaterial : current.slow ? slowMaterial : goMaterial;
-                //meshRenderer.enabled = current.waiting + current.active > 0;
+                meshRenderer.enabled = current.waiting > 0;
             }
             active += current.active;
         }
 
-        Target currentStop = stopPoints[currentGo];
+        /*Target currentStop = stopPoints[currentGo];
         time += Time.deltaTime;
 
         if (time > activeTimes[currentGo])
@@ -72,7 +72,7 @@ public class JunctionController : MonoBehaviour
                 currentGo = (currentGo + 1) % stopPoints.Length;
                 stopPoints[currentGo].stop = false;
             }
-        }
+        }*/
 
         active = 0;
     }

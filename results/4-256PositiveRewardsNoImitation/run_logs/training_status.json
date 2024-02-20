@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 2551759,
+                "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2551759.onnx",
+                "reward": 1164.7723654470135,
+                "creation_time": 1708404796.4590197,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2551759.pt"
+                ]
+            },
+            {
+                "steps": 2555413,
+                "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2555413.onnx",
+                "reward": 1195.4155680338542,
+                "creation_time": 1708405013.8909009,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2555413.pt"
+                ]
+            },
+            {
+                "steps": 2557783,
+                "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2557783.onnx",
+                "reward": 1172.9589233398438,
+                "creation_time": 1708405250.6414049,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2557783.pt"
+                ]
+            },
+            {
+                "steps": 2999431,
+                "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2999431.onnx",
+                "reward": 1289.295878092448,
+                "creation_time": 1708410041.4947119,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-2999431.pt"
+                ]
+            },
+            {
+                "steps": 3000648,
+                "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-3000648.onnx",
+                "reward": 1290.4629181892642,
+                "creation_time": 1708410041.5932093,
+                "auxillary_file_paths": [
+                    "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-3000648.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3000648,
+            "file_path": "results\\4-256PositiveRewardsNoImitation\\SelfDrive.onnx",
+            "reward": 1290.4629181892642,
+            "creation_time": 1708410041.5932093,
+            "auxillary_file_paths": [
+                "results\\4-256PositiveRewardsNoImitation\\SelfDrive\\SelfDrive-3000648.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

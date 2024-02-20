@@ -112,15 +112,6 @@ public class CarAgent : Agent
         return stateReward;
     }
 
-    private void FixedUpdate()
-    {
-
-        //carController.Move(0, 1, 1, 0);
-        carController.Move(steer, accelerate, accelerate, brake);
-        Debug.Log($"Moved: {steer,-10:F2} {accelerate,-11:F2} {brake,-6:F2}");
-
-
-    }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
@@ -129,7 +120,7 @@ public class CarAgent : Agent
         brake = actions.ContinuousActions[2] >= 0.5f ? actions.ContinuousActions[2] : 0;
 
         // Drive
-        //carController.Move(steer, accelerate, accelerate, brake);
+        carController.Move(steer, accelerate, accelerate, brake);
         //Debug.Log("Moved: " + steer + "   " + accelerate + "   " + brake);
 
         // UPDATE VALUES
@@ -178,21 +169,18 @@ public class CarAgent : Agent
             EndEpisode();
         }
 
-
-        //Debug.Log($"{steering,14}" + " " + $"{acceleration,14}" + " " + $"{environmentController.brake,10}" + "         Reward: " + $"{reward,10}" + "    Speed: "+ $"{forwardSpeed,10}");
-        //Debug.Log("Speed: " + forwardSpeed);
-
-
         if (environmentController.CheckReachedTarget())
         {
             float inverseTurnSpeed = 1 - (Math.Max(forwardVelocity - 15f, 0) / (carController.MaxSpeed - 15f));
             //float inverseNextAngle = 1 - (Math.Min(Math.Abs(nextTargetAngle), 90f) / 90f);
 
             //currentReward += 150 * inverseTurnSpeed * inverseNextAngle;
-            currentReward += targetReward * inverseTurnSpeed;
+            currentReward += targetReward;
             //currentReward += 100;
             timeOfLastTarget = Time.time;
         }
+
+        //if (currentTarget.stop && targetDistance <= carController.MaxSpeed && forwardVelocity >)
 
         //AddReward(100*(currentReward - previousStateReward));
         //Debug.Log(StepCount + ":   " + 100 * (currentReward - previousStateReward));
