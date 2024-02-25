@@ -3,7 +3,7 @@ behaviors:
     trainer_type: sac
 
     hyperparameters:
-      learning_rate: 0.0003
+      learning_rate: 0.001
       learning_rate_schedule: constant
       batch_size: 256
       buffer_size: 500000
@@ -14,7 +14,6 @@ behaviors:
       init_entcoef: 1.0
       reward_signal_steps_per_update: 10.0
 
-
     network_settings:
       normalize: false # Whether to normalise inputs
       hidden_units: 256 # Typical range: 32 - 512
@@ -24,23 +23,23 @@ behaviors:
     reward_signals:
       # environment reward 
       extrinsic:
-        gamma: 0.97 # Typical range: 0.8 - 0.995. Discount factor for future rewards coming from the environment
+        gamma: 0.99 # Typical range: 0.8 - 0.995. Discount factor for future rewards coming from the environment
         strength: 1.0
-      gail:
-        gamma: 0.97
-        strength: 0.1
-        network_settings:
-          normalize: false
-          hidden_units: 64
-          num_layers: 3
-          vis_encode_type: simple
-        learning_rate: 0.0003
-        use_actions: false
-        use_vail: false
-        demo_path: C:\Users\lukew\Project\Car Simulation\demos\InitialRecording.demo
+      # gail:
+      #   gamma: 0.97
+      #   strength: 0.1
+      #   network_settings:
+      #     normalize: false
+      #     hidden_units: 64
+      #     num_layers: 3
+      #     vis_encode_type: simple
+      #   learning_rate: 0.0003
+      #   use_actions: false
+      #   use_vail: false
+      #   demo_path: C:\Users\lukew\Project\Car Simulation\demos\InitialRecording.demo
 
     keep_checkpoints: 5 # The maximum number of model checkpoints to keep. Checkpoints are saved after the number of steps specified by the checkpoint_interval option.
-    max_steps: 4100000 # 0 for infinite
-    time_horizon: 8192 # How many steps of experience to collect per-agent before adding it to the experience buffer
+    max_steps: 4000000 # 0 for infinite
+    time_horizon: 1000 # How many steps of experience to collect per-agent before adding it to the experience buffer
     summary_freq: 20000 # Number of experiences that needs to be collected before generating and displaying training statistics
     threaded: true

@@ -35,10 +35,12 @@ public class AIEnvironmentControl : MonoBehaviour
     public Target currentTarget;
     public Target nextTarget;
 
+    public LineRenderer lineRenderer;
+
 
     private void Start()
     {
-
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
     }
 
     private void Setup()
@@ -156,6 +158,32 @@ public class AIEnvironmentControl : MonoBehaviour
         return Vector3.Distance(currentTarget.transform.position, path[previousIndex].transform.position);
     }
 
+
+    public Vector2 ClosestPointOnCenterLine(Vector3 v3Position)
+    {
+        Vector2 v2Position = new(v3Position.x, v3Position.z);
+
+        Target previousTarget = path[index == 0 ? (path.Count + index - 2) % path.Count : (path.Count + index - 1) % path.Count];
+        Vector2 previous = new(previousTarget.transform.position.x, previousTarget.transform.position.z);
+        Vector2 current = new(currentTarget.transform.position.x, currentTarget.transform.position.z);
+
+        Vector2 AB = current - previous;
+        Vector2 AC = v2Position - previous;
+
+        // Calculate the projection of AC onto AB
+        float t = Vector2.Dot(AC, AB) / Vector2.Dot(AB, AB);
+
+        // Calculate the closest point on the line AB to point C
+        Vector2 closestPoint = previous + t * AB;
+
+        // Update the line renderer positions
+        lineRenderer.SetPosition(0, v3Position); // Start position is the center of the car
+        lineRenderer.SetPosition(1, new(closestPoint.x, v3Position.y, closestPoint.y)); // End position is the closest point on the line AB
+        lineRenderer.enabled = true;
+
+        return closestPoint;
+    }
+
     private void CheckIfArrived()
     {
         Target nextFinish = NextFinish();
@@ -190,6 +218,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     public bool CheckReachedTarget()
     {
+        CheckIfArrived();
         if (reachedTarget)
         {
             reachedTarget = false;

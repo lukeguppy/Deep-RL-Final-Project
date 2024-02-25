@@ -1,0 +1,43 @@
+25/02
+Reward: 
+	Initially:
+		(distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(angleRatio * distanceChange)) : (angleRatio * distanceChange)
+	After learning basic behaviour:
+		(centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(centerRatio * angleRatio * distanceChange)) : (centerRatio * angleRatio * distanceChange)
+		currentReward += targetReward * (1 - (Math.Max(forwardVelocity - 15f, 0) / (carController.MaxSpeed - 15f)))
+Config:
+    hyperparameters:
+      batch_size: 1000
+      buffer_size: 10000
+      learning_rate: 0.0004
+      beta: 0.003
+      epsilon: 0.25
+      lambd: 0.925
+      num_epoch: 5
+
+    network_settings:
+      normalize: false
+      hidden_units: 256
+      num_layers: 4
+
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+      curiosity:
+        gamma: 0.99
+        strength: 0.1
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+
+    checkpoint_interval: 500000
+    max_steps: 2000000
+    time_horizon: 2000
+    summary_freq: 20000
+

@@ -11,6 +11,7 @@ using UnityEditor.Rendering;
 using System;
 using System.Transactions;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 
 public class CarAgent : Agent
 {
@@ -38,13 +39,19 @@ public class CarAgent : Agent
 
     private float steer, accelerate, brake = 0;
 
-    private float targetReward = 30f;
+    private float targetReward = 25f;
     private float crashReward = -50f;
 
     private float currentReward = 0;
 
     public float timeOfLastTarget = 0;
     private float previousNormalisedDistance = 0;
+    private float previousDistance = 0;
+
+    private bool reachedTarget = true;
+
+    private float centerAngle;
+    private float centerDistance;
 
     public override void Initialize() {
         carController = GetComponent<CarController>();
@@ -80,8 +87,6 @@ public class CarAgent : Agent
         float speedWeight = 0;
         float weightSum = angleWeight + distanceWeight + speedWeight;
 
-        float normalisedDistance = targetDistance / environmentController.DistanceBetweenTargets();
-
         //stateReward -= targetAngle == 0 ? 0 : angleWeight/weightSum * (float)Math.Pow(Math.Abs(targetAngle / 180f), 1.5f);
 
         //stateReward += (angleWeight / weightSum) * 2.5f / 180f; // to make the angle reward positive in the range of 2.5 degrees
@@ -102,12 +107,50 @@ public class CarAgent : Agent
 
         //stateReward += (speedWeight / weightSum) * (forwardVelocity / carController.MaxSpeed);
 
-        //Debug.Log((((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance))));
-        stateReward += (((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance)));
+        //Debug.Log((((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance))));'
 
-        if (forwardVelocity < 0) stateReward -= 0.1f;
+        //float normalisedDistance = targetDistance / environmentController.DistanceBetweenTargets();
 
-        previousNormalisedDistance = normalisedDistance;
+        //float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
+        float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
+        //float normDistanceChange = Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance));
+
+        float distanceChange = 0f;
+        if (!reachedTarget)
+        {
+            distanceChange = previousDistance - targetDistance;
+        }
+        else
+        {
+            reachedTarget = false;
+        }
+
+        Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
+
+        Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
+
+        centerAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter);
+
+        centerAngle = Mathf.Repeat(centerAngle + 180f, 360f) - 180f;
+        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
+
+        float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
+        float centerRatio = (1.6f - centerDist) / 1.6f;
+
+        //stateReward += (angleRatio < 0 && normDistanceChange < 0) ? -angleRatio * normDistanceChange : angleRatio * normDistanceChange;
+        // stateReward += (angleRatio < 0 && distanceChange < 0) ? -angleRatio * distanceChange : angleRatio * distanceChange;
+        //centerRatio = 1;
+        //Debug.Log(angleRatio + "   " + distanceChange);
+        stateReward += (centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(centerRatio * angleRatio * distanceChange)) : (centerRatio * angleRatio * distanceChange);
+
+        //stateReward += 0.01f* distanceChange;
+
+        //Debug.Log(centerDist + "   " + targetAngle);
+
+        if (forwardVelocity < 0) stateReward += 0.025f * forwardVelocity;
+
+        //previousNormalisedDistance = normalisedDistance;
+        previousDistance = targetDistance;
 
         return stateReward;
     }
@@ -121,7 +164,6 @@ public class CarAgent : Agent
 
         // Drive
         carController.Move(steer, accelerate, accelerate, brake);
-        //Debug.Log("Moved: " + steer + "   " + accelerate + "   " + brake);
 
         // UPDATE VALUES
         currentTarget = environmentController.currentTarget;
@@ -141,14 +183,14 @@ public class CarAgent : Agent
 
         forwardVelocity = carController.CurrentSpeed * (Vector3.Dot(transform.forward, carController.CurrentVelocity) >= 0 ? 1 : -1);
 
-        // Get reward
+        float currentReward = 0f;
 
-        currentReward = CalculateReward();
+        // Get reward
 
         if (collided)
         {
             AddReward(crashReward);
-            Debug.Log(GetCumulativeReward());
+            Debug.Log(StepCount + ":  " + GetCumulativeReward());
             EndEpisode();
             collided = false;
             return;
@@ -157,7 +199,7 @@ public class CarAgent : Agent
         if (oob)
         {
             AddReward(crashReward);
-            Debug.Log(GetCumulativeReward());
+            Debug.Log(StepCount + ":  " + GetCumulativeReward());
             EndEpisode();
             oob = false;
         }
@@ -165,31 +207,36 @@ public class CarAgent : Agent
         if (Time.time - timeOfLastTarget > 20)
         {
             AddReward(crashReward);
-            Debug.Log(GetCumulativeReward());
+            Debug.Log(StepCount + ":  " + GetCumulativeReward());
             EndEpisode();
         }
 
         if (environmentController.CheckReachedTarget())
         {
+            reachedTarget = true;
             float inverseTurnSpeed = 1 - (Math.Max(forwardVelocity - 15f, 0) / (carController.MaxSpeed - 15f));
-            //float inverseNextAngle = 1 - (Math.Min(Math.Abs(nextTargetAngle), 90f) / 90f);
 
-            //currentReward += 150 * inverseTurnSpeed * inverseNextAngle;
-            currentReward += targetReward;
-            //currentReward += 100;
+            currentReward += targetReward * inverseTurnSpeed;
+
             timeOfLastTarget = Time.time;
         }
+
+        currentReward += CalculateReward();
 
         //if (currentTarget.stop && targetDistance <= carController.MaxSpeed && forwardVelocity >)
 
         //AddReward(100*(currentReward - previousStateReward));
         //Debug.Log(StepCount + ":   " + 100 * (currentReward - previousStateReward));
+        
         AddReward(currentReward);
+
+        //Debug.Log(GetCumulativeReward());
+
         //Debug.Log(StepCount + ":   " + currentReward);
 
         if (environmentController.finished)
         {
-            Debug.Log(GetCumulativeReward());
+            Debug.Log(StepCount + ":  " + GetCumulativeReward());
             EndEpisode();
         }
 
@@ -205,7 +252,8 @@ public class CarAgent : Agent
         sensor.AddObservation(currentTarget.stop);
         sensor.AddObservation(currentTarget.slow);
         sensor.AddObservation(forwardVelocity);
-        sensor.AddObservation(collided);
+        sensor.AddObservation(centerAngle);
+        sensor.AddObservation(centerDistance);
 
     }
 

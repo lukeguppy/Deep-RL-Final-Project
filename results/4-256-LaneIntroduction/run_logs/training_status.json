@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 999237,
+                "file_path": "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-999237.onnx",
+                "reward": 909.2015266418457,
+                "creation_time": 1708882787.8210847,
+                "auxillary_file_paths": [
+                    "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-999237.pt"
+                ]
+            },
+            {
+                "steps": 1498926,
+                "file_path": "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1498926.onnx",
+                "reward": 1209.5161743164062,
+                "creation_time": 1708885174.1207628,
+                "auxillary_file_paths": [
+                    "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1498926.pt"
+                ]
+            },
+            {
+                "steps": 1872376,
+                "file_path": "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1872376.onnx",
+                "reward": 1272.567626953125,
+                "creation_time": 1708886956.8512511,
+                "auxillary_file_paths": [
+                    "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1872376.pt"
+                ]
+            },
+            {
+                "steps": 1998709,
+                "file_path": "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1998709.onnx",
+                "reward": 1373.9511108398438,
+                "creation_time": 1708888393.116517,
+                "auxillary_file_paths": [
+                    "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-1998709.pt"
+                ]
+            },
+            {
+                "steps": 2000029,
+                "file_path": "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-2000029.onnx",
+                "reward": 1379.5601264105903,
+                "creation_time": 1708888393.2203171,
+                "auxillary_file_paths": [
+                    "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-2000029.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2000029,
+            "file_path": "results\\4-256-LaneIntroduction\\SelfDrive.onnx",
+            "reward": 1379.5601264105903,
+            "creation_time": 1708888393.2203171,
+            "auxillary_file_paths": [
+                "results\\4-256-LaneIntroduction\\SelfDrive\\SelfDrive-2000029.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}
