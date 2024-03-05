@@ -1,0 +1,47 @@
+01/03
+Reward: 
+- added corner turning at 500,000
+- added lane reward at 650,000 (at this point best is ~1500)
+- lights attempt at 1,000,000 at 3x speed 
+- cars attempt at 2,500,000 at 3x speed 
+- 1x speed at 4,450,000 (/ 4,500,000)
+
+
+Config:
+Reduced ray stack from 3 to 1
+
+    hyperparameters:
+      batch_size: 250
+      buffer_size: 5000
+      learning_rate: 0.0004
+      beta: 0.003
+      epsilon: 0.25
+      lambd: 0.925
+      num_epoch: 5
+
+    network_settings:
+      normalize: false
+      hidden_units: 256
+      num_layers: 4
+
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+         curiosity:
+        gamma: 0.99
+        strength: 0.1
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+
+    checkpoint_interval: 500000
+    max_steps: 3250000
+    time_horizon: 1000
+    summary_freq: 20000
+

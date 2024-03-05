@@ -53,7 +53,7 @@ public class AutoCarControl : MonoBehaviour
             return;
         }
 
-        index = (startIndex >= 0) ? validSpawns[startIndex] : validSpawns[Random.Range(0, validSpawns.Count - 1)];
+        index = (startIndex >= 0) ? validSpawns[startIndex] : validSpawns[Random.Range(0, validSpawns.Count)];
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -62,7 +62,7 @@ public class AutoCarControl : MonoBehaviour
         transform.position = path[index].GetCoords() + new Vector3(0,0.5f,0);
 
         // Calculate the direction to the next target
-        Vector3 direction = path[index + 1].GetCoords() - path[index].GetCoords();
+        Vector3 direction = path[(index + 1)%path.Count].GetCoords() - path[index].GetCoords();
 
         // Calculate the rotation angle to the next target
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
@@ -130,8 +130,7 @@ public class AutoCarControl : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
-            ResetTargets();
-            Setup();
+            RestartCar();
         }
 
     }
@@ -140,9 +139,14 @@ public class AutoCarControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Car"))
         {
-            ResetTargets();
-            Setup();
+            RestartCar();
         }
+    }
+
+    public void RestartCar()
+    {
+        ResetTargets();
+        Setup();
     }
 
     private void CheckIfArrived()
@@ -196,7 +200,6 @@ public class AutoCarControl : MonoBehaviour
         Vector3 finishLocalPosition = transform.InverseTransformPoint(nextFinish.GetCoords());
         Vector3 targetRelativeDirection = nextStop.GetCoords() - transform.position;
 
-        // Use FindNearestVehicle() to get the position of the nearest vehicle
         GameObject nearest = FindNearestVehicleInfront();
         // Calculate the distance to the nearest vehicle
         float distanceToNearestVehicle = (nearest != null) ? Vector3.Distance(transform.position, nearest.transform.position) : Mathf.Infinity;
@@ -321,52 +324,6 @@ public class AutoCarControl : MonoBehaviour
                     // Check if they are traveling in roughly the same direction
                     float forwardAngle = Mathf.Abs(Vector3.Angle(currentForward, vehicleForward));
                     if (forwardAngle <= 85f)
-                    {
-                        // Calculate the distance between this object and the vehicle
-                        float distance = Vector3.Distance(currentPosition, vehiclePosition);
-
-                        // Check if this vehicle is closer than the previous nearest vehicle
-                        if (distance < nearestDistance)
-                        {
-                            nearestDistance = distance;
-                            nearestVehicle = vehicle;
-                        }
-                    }
-                }
-            }
-        }
-
-        return nearestVehicle;
-    }
-
-    GameObject FindNearestVehicleBehind()
-    {
-        GameObject nearestVehicle = null;
-        float nearestDistance = Mathf.Infinity;
-
-        // Get the position and forward direction of this GameObject
-        Vector3 currentPosition = transform.position;
-        Vector3 currentForward = transform.forward;
-
-        foreach (GameObject vehicle in otherCars)
-        {
-            // Make sure the current vehicle is not the same as the one calling the function
-            if (vehicle != gameObject)
-            {
-                // Get the position and forward direction of the current vehicle
-                Vector3 vehiclePosition = vehicle.transform.position;
-                Vector3 vehicleForward = vehicle.transform.forward;
-
-                // Calculate the direction from the current vehicle to the other vehicle
-                Vector3 directionToVehicle = (vehiclePosition - currentPosition).normalized;
-
-                // Check if the other vehicle is within 45 degrees in front
-                float angle = Mathf.Abs(Vector3.Angle(currentForward, directionToVehicle));
-                if (angle >= 180 - viewAngle)
-                {
-                    // Check if they are traveling in roughly the same direction
-                    float forwardAngle = Mathf.Abs(Vector3.Angle(currentForward, vehicleForward));
-                    if (forwardAngle >= 95f)
                     {
                         // Calculate the distance between this object and the vehicle
                         float distance = Vector3.Distance(currentPosition, vehiclePosition);

@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 609053,
+                "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-609053.onnx",
+                "reward": 62.36990261077881,
+                "creation_time": 1709259364.1314726,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-609053.pt"
+                ]
+            },
+            {
+                "steps": 745448,
+                "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-745448.onnx",
+                "reward": null,
+                "creation_time": 1709260054.9495854,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-745448.pt"
+                ]
+            },
+            {
+                "steps": 766113,
+                "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-766113.onnx",
+                "reward": 887.5802408854166,
+                "creation_time": 1709260165.3823826,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-766113.pt"
+                ]
+            },
+            {
+                "steps": 999796,
+                "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-999796.onnx",
+                "reward": 1020.4934501647949,
+                "creation_time": 1709261287.1791961,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-999796.pt"
+                ]
+            },
+            {
+                "steps": 1000296,
+                "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-1000296.onnx",
+                "reward": 1020.4934501647949,
+                "creation_time": 1709261287.243548,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-1000296.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000296,
+            "file_path": "results\\4-256-TrafficCurriculum\\SelfDrive.onnx",
+            "reward": 1020.4934501647949,
+            "creation_time": 1709261287.243548,
+            "auxillary_file_paths": [
+                "results\\4-256-TrafficCurriculum\\SelfDrive\\SelfDrive-1000296.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

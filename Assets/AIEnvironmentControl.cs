@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -26,7 +27,6 @@ public class AIEnvironmentControl : MonoBehaviour
     public int index = 0;
     private Target activeStop;
     private Target activeFinish;
-    private Target nextStop;
     private bool started = false;
     private bool reachedTarget = false;
 
@@ -34,6 +34,7 @@ public class AIEnvironmentControl : MonoBehaviour
     public float currentSpeed = 0;
     public Target currentTarget;
     public Target nextTarget;
+    public Target nextStop;
 
     public LineRenderer lineRenderer;
 
@@ -57,7 +58,7 @@ public class AIEnvironmentControl : MonoBehaviour
         rb.velocity = rb.angularVelocity = Vector3.zero;
 
         // Start the car at a random target location
-        transform.position = path[index].GetCoords() + new Vector3(5f, 0.5f, 0);
+        transform.position = path[index].GetCoords() + new Vector3(25f, 0.5f, 0);
 
         // Calculate the direction to the next target
         Vector3 direction = path[index + 1].GetCoords() - path[index].GetCoords();
@@ -79,11 +80,11 @@ public class AIEnvironmentControl : MonoBehaviour
         currentTarget.GetComponent<MeshRenderer>().enabled = true;
 
         if (nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
-        nextStop = NextStop();
+        nextStop = GetNextStop();
 
         nextStop.waiting++;
 
-        activeFinish = ActiveFinish();
+        activeFinish = GetActiveFinish();
         activeFinish.active++;
     }
 
@@ -94,7 +95,18 @@ public class AIEnvironmentControl : MonoBehaviour
             // Force initialisation of the targets before using their coordinates otherwise they are 0
             foreach (var target in path) target.ForceStart();
             Setup();
-            otherCars = GameObject.FindGameObjectsWithTag("Car");
+            GameObject[] potentialCars = GameObject.FindGameObjectsWithTag("Car");
+            otherCars = new GameObject[potentialCars.Length - 1];
+
+            int j = 0;
+
+            for (int i = 0; i < potentialCars.Length; i++)
+            {
+                if (potentialCars[i].GameObject() != gameObject)
+                {
+                    otherCars[j++] = potentialCars[i];
+                }
+            }
 
             started = true;
         }
@@ -112,6 +124,16 @@ public class AIEnvironmentControl : MonoBehaviour
         CheckIfArrived();
     }
 
+    public void ResetCars()
+    {
+        if (!started) Update();
+        foreach (var car in otherCars)
+        {
+            AutoCarControl carControl = car.GetComponent<AutoCarControl>();
+            
+            carControl.RestartCar();
+        }
+    }
 
     private void ResetTargets()
     {
@@ -127,29 +149,11 @@ public class AIEnvironmentControl : MonoBehaviour
 
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        /*if (other.CompareTag("Wall"))
-        {
-            Restart();
-        }*/
-
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-       /* if (collision.gameObject.CompareTag("Car"))
-        {
-            Restart();
-        }*/
-    }
-
     public void Restart()
     {
         if (currentTarget != null) currentTarget.GetComponent<MeshRenderer>().enabled = false;
         ResetTargets();
         Setup();
-
     }
 
     public float DistanceBetweenTargets()
@@ -186,9 +190,8 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void CheckIfArrived()
     {
-        Target nextFinish = NextFinish();
+        Target nextFinish = GetNextFinish();
         if (!currentTarget.stop
-            && (!currentTarget.stopPoint || nextFinish.active < nextFinish.carLimit)
             && Vector3.Distance(currentTarget.GetCoords(), transform.position) < arriveDistance)
         {
             if (currentTarget.stopPoint)
@@ -197,7 +200,7 @@ public class AIEnvironmentControl : MonoBehaviour
                 activeStop.waiting = (int)MathF.Max(0, activeStop.waiting - 1);
                 activeStop.active++;
                 activeFinish.active = (int)MathF.Max(0, activeFinish.active - 1);
-                activeFinish = NextFinish();
+                activeFinish = GetNextFinish();
                 activeFinish.active++;
             }
 
@@ -205,13 +208,13 @@ public class AIEnvironmentControl : MonoBehaviour
             {
                 activeStop.active = (int)MathF.Max(0, activeStop.active - 1);
                 activeStop = null;
-                nextStop = NextStop();
                 nextStop.waiting++;
             }
 
             currentTarget.GetComponent<MeshRenderer>().enabled = false;
             reachedTarget = true;
             SetNextTargetIndex();
+            nextStop = GetNextStop();
             currentTarget.GetComponent<MeshRenderer>().enabled = true;
         }
     }
@@ -230,15 +233,15 @@ public class AIEnvironmentControl : MonoBehaviour
         }
     }
 
-    private float CalculateRelativeSpeedTowards(Rigidbody body)
+    public float CalculateRelativeSpeedTowards(Rigidbody body)
     {
         // Check if the bodies are moving towards each other
         return Mathf.Max(0, rb.velocity.magnitude - body.velocity.magnitude) * 2.23693629f;
     }
 
-    private Target NextStop()
+    public Target GetNextStop()
     {
-        for (int i = index; i < path.Count + index; i++)
+        for (int i = index; i < path.Count + index + 1; i++)
         {
             int current = i % path.Count;
             if (path[current].stopPoint) return path[current];
@@ -246,7 +249,7 @@ public class AIEnvironmentControl : MonoBehaviour
         return null;
     }
       
-    private Target NextFinish()
+    private Target GetNextFinish()
     {
         for (int i = index; i < path.Count + index; i++)
         {
@@ -256,19 +259,21 @@ public class AIEnvironmentControl : MonoBehaviour
         return null;
     }
 
-    private Target ActiveFinish()
+    private Target GetActiveFinish()
     {
         for (int i = 0; i < path.Count; i++)
         {
             int current = (path.Count + index - 1 - i) % path.Count;
             if (path[current].finishedPoint) return path[current];
-            if (path[current].stopPoint) return NextFinish();
+            if (path[current].stopPoint) return GetNextFinish();
         }
         return null;
     }
 
-    GameObject FindNearestVehicleInfront()
+    public GameObject FindNearestVehicleInfront()
     {
+        if (!started) Update();
+
         GameObject nearestVehicle = null;
         float nearestDistance = Mathf.Infinity;
 
@@ -313,7 +318,7 @@ public class AIEnvironmentControl : MonoBehaviour
         return nearestVehicle;
     }
 
-    GameObject FindNearestVehicleBehind()
+    public GameObject FindNearestVehicleBehind()
     {
         GameObject nearestVehicle = null;
         float nearestDistance = Mathf.Infinity;

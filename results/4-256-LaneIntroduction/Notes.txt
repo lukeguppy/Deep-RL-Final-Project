@@ -6,6 +6,8 @@ Reward:
 		(centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(centerRatio * angleRatio * distanceChange)) : (centerRatio * angleRatio * distanceChange)
 		currentReward += targetReward * (1 - (Math.Max(forwardVelocity - 15f, 0) / (carController.MaxSpeed - 15f)))
 Config:
+Reduced ray stack from 3 to 1
+
     hyperparameters:
       batch_size: 1000
       buffer_size: 10000

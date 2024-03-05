@@ -19,6 +19,7 @@ public class JunctionController : MonoBehaviour
 
     private float time;
     private int currentGo;
+    private int totalActiveOrWaiting = 0;
     private bool started = false;
 
 
@@ -37,43 +38,69 @@ public class JunctionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //AlwaysGo();
+        TimedLights();
+    }
+
+    private void AlwaysGo()
+    {
         if (!started)
         {
-            stopPoints[0].stop = false;
-            for (int i = 1; i < stopPoints.Length; i++) stopPoints[i].stop = false;
+            for (int i = 0; i < stopPoints.Length; i++)
+            {
+                stopPoints[i].stop = false;
+                MeshRenderer meshRenderer = stopPoints[i].GetComponent<MeshRenderer>();
+                meshRenderer.material = goMaterial;
+            }
             started = true;
         }
 
+    }
+
+    private void TimedLights()
+    {
+        if (!started)
+        {
+            stopPoints[0].stop = false;
+            for (int i = 1; i < stopPoints.Length; i++) stopPoints[i].stop = true;
+            started = true;
+        }
+
+        
         for (int i = 0; i < stopPoints.Length; i++)
         {
             Target current = stopPoints[i];
             if (showStopPoints)
             {
                 MeshRenderer meshRenderer = current.GetComponent<MeshRenderer>();
+                meshRenderer.enabled = true;
                 meshRenderer.material = current.stop ? stopMaterial : current.slow ? slowMaterial : goMaterial;
-                meshRenderer.enabled = current.waiting > 0;
             }
             active += current.active;
         }
 
-        /*Target currentStop = stopPoints[currentGo];
+        Target currentStop = stopPoints[currentGo];
         time += Time.deltaTime;
 
         if (time > activeTimes[currentGo])
         {
             currentStop.slow = true;
         }
-        if (currentStop.waiting == 0 || time > activeTimes[currentGo] + 1.5f)
+
+        //if (currentStop.waiting == 0 || time > activeTimes[currentGo] + 1.5f)
+        if (time > activeTimes[currentGo] + 1.5f)
         {
             currentStop.slow = false;
             currentStop.stop = true;
-            if (active == 0) {
+            if (active == 0)
+            {
                 time = 0f;
                 currentGo = (currentGo + 1) % stopPoints.Length;
                 stopPoints[currentGo].stop = false;
             }
-        }*/
+        }
 
         active = 0;
+
     }
 }

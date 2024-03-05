@@ -1,0 +1,106 @@
+25/02
+Reward: 
+(light issue from x - 2780000)
+
+        // REWARD 1 (car infront + angle + distance):
+
+        float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
+        float distanceChange = 0f;
+        distanceChange = (!reachedTarget) ? previousDistance - targetDistance : 0;
+        reachedTarget = false;
+        stateReward += (distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(angleRatio * distanceChange)) : (angleRatio * distanceChange);
+        if (forwardVelocity < 0) stateReward += 0.01f * forwardVelocity;
+
+        // REWARD 2 (+ lanes):
+        float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
+        float distanceChange = 0f;
+        distanceChange = (!reachedTarget) ? previousDistance - targetDistance : 0;
+        reachedTarget = false;
+        Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
+        Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
+        centerAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter);
+        centerAngle = Mathf.Repeat(centerAngle + 180f, 360f) - 180f;
+        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
+        float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
+        float centerRatio = (1.6f - centerDist) / 1.6f;
+        stateReward += (centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(centerRatio * angleRatio * distanceChange)) : (centerRatio * angleRatio * distanceChange);
+        if (forwardVelocity < 0) stateReward += 0.025f * forwardVelocity;
+
+        // REWARD 3 (+ lights):
+        float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
+        float distanceChange = 0f;
+        distanceChange = (!reachedTarget) ? previousDistance - targetDistance : 0;
+        reachedTarget = false;
+        Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
+        Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
+        centerAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter);
+        centerAngle = Mathf.Repeat(centerAngle + 180f, 360f) - 180f;
+        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
+        float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
+        float centerRatio = (1.6f - centerDist) / 1.6f;
+        float stopRatio;
+        float carInfrontRelativeVelocity = (carInfront != null) ? environmentController.CalculateRelativeSpeedTowards(carInfront.GetComponent<Rigidbody>()) : 0f;
+        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        float dotProduct = (Vector3.Dot(transform.forward, directionToTarget) > 0) ? 1 : -1;
+        if (currentTarget.stop || currentTarget.slow)
+        {
+            if (targetDistance < carInfrontDistance)
+            {
+                stopRatio = dotProduct * CalculateStopRatio(forwardVelocity, 2 * targetDistance - 2.5f);
+            }
+            else
+            {
+                stopRatio = Math.Min(CalculateStopRatio(carInfrontRelativeVelocity, carInfrontDistance - 2.5f), dotProduct * CalculateStopRatio(forwardVelocity, 2 * targetDistance - 2.5f));
+            }
+        }
+        else
+        {
+            stopRatio = CalculateStopRatio(carInfrontRelativeVelocity, 2 * carInfrontDistance - 2.5f);
+        }
+            
+        stateReward += (stopRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(stopRatio * centerRatio * angleRatio * distanceChange)) : (stopRatio * centerRatio * angleRatio * distanceChange);
+        if (forwardVelocity < 0) stateReward += 0.1f * forwardVelocity;
+        if (dotProduct < 0)
+        {
+            // If the forward vector and direction to the target position are in opposite directions
+            stateReward -= 0.1f;
+        }
+
+Config:
+Reduced ray stack from 3 to 1
+
+    hyperparameters:
+      batch_size: 250
+      buffer_size: 5000
+      learning_rate: 0.0004
+      beta: 0.003
+      epsilon: 0.25
+      lambd: 0.925
+      num_epoch: 5
+
+    network_settings:
+      normalize: false
+      hidden_units: 256
+      num_layers: 4
+
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+         curiosity:
+        gamma: 0.99
+        strength: 0.1
+        network_settings:
+          normalize: false
+          hidden_units: 128
+          num_layers: 2
+
+    checkpoint_interval: 500000
+    max_steps: 3250000
+    time_horizon: 1000
+    summary_freq: 20000
+

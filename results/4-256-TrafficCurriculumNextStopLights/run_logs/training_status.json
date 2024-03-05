@@ -1,0 +1,65 @@
+{
+    "SelfDrive": {
+        "checkpoints": [
+            {
+                "steps": 1499715,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-1499715.onnx",
+                "reward": -64.88484001159668,
+                "creation_time": 1709526399.02939,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-1499715.pt"
+                ]
+            },
+            {
+                "steps": 1999853,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-1999853.onnx",
+                "reward": 476.4006681442261,
+                "creation_time": 1709529413.197518,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-1999853.pt"
+                ]
+            },
+            {
+                "steps": 2000353,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2000353.onnx",
+                "reward": 476.4006681442261,
+                "creation_time": 1709529413.2609124,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2000353.pt"
+                ]
+            },
+            {
+                "steps": 2499803,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2499803.onnx",
+                "reward": 452.3826503753662,
+                "creation_time": 1709557420.338266,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2499803.pt"
+                ]
+            },
+            {
+                "steps": 2500303,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2500303.onnx",
+                "reward": 452.3826503753662,
+                "creation_time": 1709557420.400659,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2500303.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2500303,
+            "file_path": "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive.onnx",
+            "reward": 452.3826503753662,
+            "creation_time": 1709557420.400659,
+            "auxillary_file_paths": [
+                "results\\4-256-TrafficCurriculumNextStopLights\\SelfDrive\\SelfDrive-2500303.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}
