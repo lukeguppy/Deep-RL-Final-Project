@@ -2,15 +2,6 @@
     "SelfDrive": {
         "checkpoints": [
             {
-                "steps": 3587405,
-                "file_path": "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-3587405.onnx",
-                "reward": 553.2305526733398,
-                "creation_time": 1709598865.3364089,
-                "auxillary_file_paths": [
-                    "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-3587405.pt"
-                ]
-            },
-            {
                 "steps": 3900335,
                 "file_path": "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-3900335.onnx",
                 "reward": 542.2131042480469,
@@ -45,15 +36,24 @@
                 "auxillary_file_paths": [
                     "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-4000422.pt"
                 ]
+            },
+            {
+                "steps": 4020616,
+                "file_path": "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-4020616.onnx",
+                "reward": 2229.595039367676,
+                "creation_time": 1709606191.1782906,
+                "auxillary_file_paths": [
+                    "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-4020616.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 4000422,
+            "steps": 4020616,
             "file_path": "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive.onnx",
-            "reward": 352.811331431071,
-            "creation_time": 1709604803.4596255,
+            "reward": 2229.595039367676,
+            "creation_time": 1709606191.1782906,
             "auxillary_file_paths": [
-                "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-4000422.pt"
+                "results\\4-256-TrafficCurriculumNextStopAllTraffic\\SelfDrive\\SelfDrive-4020616.pt"
             ]
         }
     },
