@@ -12,6 +12,8 @@ public class AIEnvironmentControl : MonoBehaviour
     [SerializeField]
     private float viewAngle = 45f;
     [SerializeField]
+    private float xOffset, zOffset;
+    [SerializeField]
     CarController carController;
     [SerializeField]
     private List<Target> path = null;
@@ -58,7 +60,7 @@ public class AIEnvironmentControl : MonoBehaviour
         rb.velocity = rb.angularVelocity = Vector3.zero;
 
         // Start the car at a random target location
-        transform.position = path[index].GetCoords() + new Vector3(25f, 0.5f, 0);
+        transform.position = path[index].GetCoords() + new Vector3(xOffset, 0.5f, zOffset);
 
         // Calculate the direction to the next target
         Vector3 direction = path[index + 1].GetCoords() - path[index].GetCoords();

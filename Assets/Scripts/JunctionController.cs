@@ -87,8 +87,8 @@ public class JunctionController : MonoBehaviour
             currentStop.slow = true;
         }
 
-        if (currentStop.waiting == 0 || time > activeTimes[currentGo] + 1.5f)
-        //if (time > activeTimes[currentGo] + 1.5f)
+        //if (currentStop.waiting == 0 || time > activeTimes[currentGo] + 1.5f)
+        if (time > activeTimes[currentGo] + 1.5f)
         {
             currentStop.slow = false;
             currentStop.stop = true;

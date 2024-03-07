@@ -92,35 +92,6 @@ public class CarAgent : Agent
         
         float stateReward = 0f;
 
-        /*float angleWeight = 1;
-        float distanceWeight = 1;
-        float speedWeight = 0;
-        float weightSum = angleWeight + distanceWeight + speedWeight;*/
-
-        //stateReward -= targetAngle == 0 ? 0 : angleWeight/weightSum * (float)Math.Pow(Math.Abs(targetAngle / 180f), 1.5f);
-
-        //stateReward += (angleWeight / weightSum) * 2.5f / 180f; // to make the angle reward positive in the range of 2.5 degrees
-        //stateReward += (angleWeight / weightSum) * ((90f-Math.Abs(targetAngle)) / 90f);
-
-        //stateReward += distanceWeight*0.5f;
-        //d = previousNormalisedDistance - normalisedDistance;
-        //stateReward += (distanceWeight / weightSum) * (previousNormalisedDistance - normalisedDistance);
-        //Debug.Log(previousNormalisedDistance + " - " + normalisedDistance);
-
-        //stateReward += (distanceWeight / weightSum) * Math.Min(1, 50f*(previousNormalisedDistance - normalisedDistance));
-        //stateReward += (distanceWeight / weightSum) * (1-normalisedDistance);
-
-        //float x = Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance));
-
-        //Debug.Log(x + "       " + (1 - Math.Abs(targetAngle / 90f)));
-        //Debug.Log((((90f - Math.Abs(targetAngle)) / 90f) * (distanceWeight / weightSum) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance))));
-
-        //stateReward += (speedWeight / weightSum) * (forwardVelocity / carController.MaxSpeed);
-
-        //Debug.Log((((90f - Math.Abs(targetAngle)) / 90f) * Math.Min(1, 50f * (previousNormalisedDistance - normalisedDistance))));'
-
-        //float normalisedDistance = targetDistance / environmentController.DistanceBetweenTargets();
-
 
         //stateReward = Reward1();
         //stateReward = Reward2();
@@ -436,7 +407,7 @@ public class CarAgent : Agent
 
         // Get reward
 
-        if (collided)
+/*        if (collided)
         {
             AddReward(crashReward);
             Debug.Log(StepCount + ":  " + GetCumulativeReward());
@@ -462,6 +433,7 @@ public class CarAgent : Agent
             EndEpisode();
             environmentController.ResetCars();
         }
+*/
 
         if (environmentController.CheckReachedTarget())
         {
