@@ -538,8 +538,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationThreshold: 1
-  cameraStickiness: 100
-  cameraRotationSpeed: 5
+  cameraStickiness: 50
+  cameraRotationSpeed: 2.5
 --- !u!1 &1304404745599049678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,10 +1373,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   arriveDistance: 2
+  showCenterLine: 0
+  showTarget: 0
   startIndex: 0
   showNextStop: 0
   showNextFinish: 0
-  showTarget: 0
   showCarDetection: 0
   index: 0
   finished: 0

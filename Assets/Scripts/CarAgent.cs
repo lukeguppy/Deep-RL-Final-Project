@@ -460,9 +460,8 @@ public class CarAgent : Agent
 
     }
 
-    public override void CollectObservations(VectorSensor sensor) {
-
-
+    public override void CollectObservations(VectorSensor sensor) 
+    {
         nextTarget = environmentController.nextTarget;
 
         directionToNextTarget = new(nextTarget.x - transform.position.x, nextTarget.z - transform.position.z);

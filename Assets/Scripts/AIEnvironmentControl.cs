@@ -20,9 +20,11 @@ public class AIEnvironmentControl : MonoBehaviour
     [SerializeField]
     private float arriveDistance = 1.5f;
     [SerializeField]
+    bool showCenterLine, showTarget = false;
+    [SerializeField]
     private int startIndex = 0;
     [SerializeField]
-    private bool showNextStop, showNextFinish, showTarget, showCarDetection;
+    private bool showNextStop, showNextFinish, showCarDetection;
 
     private GameObject[] otherCars;
 
@@ -79,7 +81,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
         currentTarget = path[index];
         nextTarget = path[(index + 1) % path.Count];
-        currentTarget.GetComponent<MeshRenderer>().enabled = true;
+        currentTarget.GetComponent<MeshRenderer>().enabled = showTarget;
 
         if (nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
         nextStop = GetNextStop();
@@ -185,7 +187,7 @@ public class AIEnvironmentControl : MonoBehaviour
         // Update the line renderer positions
         lineRenderer.SetPosition(0, v3Position); // Start position is the center of the car
         lineRenderer.SetPosition(1, new(closestPoint.x, v3Position.y, closestPoint.y)); // End position is the closest point on the line AB
-        lineRenderer.enabled = true;
+        lineRenderer.enabled = showCenterLine;
 
         return closestPoint;
     }
@@ -217,7 +219,7 @@ public class AIEnvironmentControl : MonoBehaviour
             reachedTarget = true;
             SetNextTargetIndex();
             nextStop = GetNextStop();
-            currentTarget.GetComponent<MeshRenderer>().enabled = true;
+            currentTarget.GetComponent<MeshRenderer>().enabled = showTarget;
         }
     }
 

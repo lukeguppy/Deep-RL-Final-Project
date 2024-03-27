@@ -3,7 +3,6 @@
 public class CarCam : MonoBehaviour
 {
     Transform rootNode;
-    Transform carCam;
     Transform car;
     Rigidbody carPhysics;
 
@@ -18,7 +17,6 @@ public class CarCam : MonoBehaviour
 
     void Awake()
     {
-        carCam = Camera.main.GetComponent<Transform>();
         rootNode = GetComponent<Transform>();
         car = rootNode.parent.GetComponent<Transform>();
         carPhysics = car.GetComponent<Rigidbody>();

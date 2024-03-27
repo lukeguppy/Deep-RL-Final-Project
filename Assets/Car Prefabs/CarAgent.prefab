@@ -1940,8 +1940,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationThreshold: 1
-  cameraStickiness: 100
-  cameraRotationSpeed: 5
+  cameraStickiness: 50
+  cameraRotationSpeed: 2.5
 --- !u!1 &2786364246933406680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,10 +2850,11 @@ MonoBehaviour:
   carController: {fileID: 7609150626709668969}
   path: []
   arriveDistance: 2
+  showCenterLine: 0
+  showTarget: 0
   startIndex: 0
   showNextStop: 0
   showNextFinish: 0
-  showTarget: 0
   showCarDetection: 0
   index: 0
   finished: 0
