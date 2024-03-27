@@ -1,6 +1,6 @@
-PWD c:\Users\lukew\OneDrive\Desktop\Project\FinalReport
+PWD c:\Users\lukew\Project\Car Simulation\FinalReport
 INPUT C:\Users\lukew\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\lukew\OneDrive\Desktop\Project\FinalReport\FinalReport.tex
+INPUT c:\Users\lukew\Project\Car Simulation\FinalReport\FinalReport.tex
 OUTPUT FinalReport.log
 INPUT C:\Users\lukew\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\lukew\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
