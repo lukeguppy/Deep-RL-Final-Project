@@ -1,0 +1,58 @@
+\contentsline {section}{\numberline {1}Abstract}{4}{}%
+\contentsline {section}{\numberline {2}Introduction to the Project}{4}{}%
+\contentsline {subsection}{\numberline {2.1}Refined Problem Statement and Addressed Gap}{4}{}%
+\contentsline {section}{\numberline {3}Background Research}{4}{}%
+\contentsline {subsection}{\numberline {3.1}Extending AI-Driven Vehicle Research:}{4}{}%
+\contentsline {subsection}{\numberline {3.2}Areas Of Research:}{4}{}%
+\contentsline {subsection}{\numberline {3.3}Summary Of Research}{5}{}%
+\contentsline {subsubsection}{\numberline {3.3.1}Foundation}{5}{}%
+\contentsline {subsubsection}{\numberline {3.3.2}Collision Occurrence}{5}{}%
+\contentsline {subsubsection}{\numberline {3.3.3}Existing Implementations}{5}{}%
+\contentsline {subsubsection}{\numberline {3.3.4}High Level Overview}{5}{}%
+\contentsline {section}{\numberline {4}Technical Aspects}{5}{}%
+\contentsline {subsection}{\numberline {4.1}Unity}{5}{}%
+\contentsline {subsection}{\numberline {4.2}Unity Simulation Abstraction}{5}{}%
+\contentsline {subsection}{\numberline {4.3}ML-Agents}{5}{}%
+\contentsline {subsubsection}{\numberline {4.3.1}Reinforcement Learning Framework}{6}{}%
+\contentsline {subsubsection}{\numberline {4.3.2}Neural Network Policies}{6}{}%
+\contentsline {subsubsection}{\numberline {4.3.3}ML-Agents Algorithm}{6}{}%
+\contentsline {subsubsection}{\numberline {4.3.4}Non-Linearity In ML-Agents}{7}{}%
+\contentsline {subsection}{\numberline {4.4}Community Support and Documentation}{7}{}%
+\contentsline {subsection}{\numberline {4.5}Git}{7}{}%
+\contentsline {section}{\numberline {5}The Simulation Environment}{8}{}%
+\contentsline {subsection}{\numberline {5.1}Roads}{8}{}%
+\contentsline {subsection}{\numberline {5.2}Pathing}{8}{}%
+\contentsline {subsection}{\numberline {5.3}The Car Control System}{8}{}%
+\contentsline {subsection}{\numberline {5.4}Environmental Cars}{8}{}%
+\contentsline {subsubsection}{\numberline {5.4.1}General Functionality}{8}{}%
+\contentsline {subsubsection}{\numberline {5.4.2}Logical Implementation}{8}{}%
+\contentsline {subsubsection}{\numberline {5.4.3}Traffic Light Interaction}{8}{}%
+\contentsline {subsection}{\numberline {5.5}Traffic Light System}{8}{}%
+\contentsline {subsubsection}{\numberline {5.5.1}Target Types}{8}{}%
+\contentsline {subsubsection}{\numberline {5.5.2}Logical Implementation}{8}{}%
+\contentsline {subsubsection}{\numberline {5.5.3}Smart Traffic}{8}{}%
+\contentsline {section}{\numberline {6}The Agent}{9}{}%
+\contentsline {subsection}{\numberline {6.1}Structure}{9}{}%
+\contentsline {subsection}{\numberline {6.2}Controls}{9}{}%
+\contentsline {subsection}{\numberline {6.3}ML-Agents Interaction}{9}{}%
+\contentsline {section}{\numberline {7}Reinforcement Learning}{9}{}%
+\contentsline {subsection}{\numberline {7.1}Reward Systems}{9}{}%
+\contentsline {subsection}{\numberline {7.2}Curriculum Learning}{9}{}%
+\contentsline {section}{\numberline {8}The Deep Neural Network}{9}{}%
+\contentsline {subsection}{\numberline {8.1}Proximal Policy Optimisation}{9}{}%
+\contentsline {subsection}{\numberline {8.2}Configuration}{9}{}%
+\contentsline {subsection}{\numberline {8.3}Hyper-parameters}{9}{}%
+\contentsline {subsection}{\numberline {8.4}Observations and Outputs}{9}{}%
+\contentsline {section}{\numberline {9}Deep Reinforcement Learning}{10}{}%
+\contentsline {section}{\numberline {10}Reward System}{10}{}%
+\contentsline {subsection}{\numberline {10.1}Curriculum Learning Implementation}{10}{}%
+\contentsline {subsection}{\numberline {10.2}Initial Reward System}{10}{}%
+\contentsline {subsection}{\numberline {10.3}Imitation Learning}{10}{}%
+\contentsline {subsection}{\numberline {10.4}Final Reward System}{10}{}%
+\contentsline {section}{\numberline {11}Problems and Oversights}{10}{}%
+\contentsline {section}{\numberline {12}Conclusion}{10}{}%
+\contentsline {section}{\numberline {13}Future Outlook}{11}{}%
+\contentsline {section}{\numberline {14}Project Management}{11}{}%
+\contentsline {section}{\numberline {15}Objectives}{11}{}%
+\contentsline {subsection}{\numberline {15.1}Must-Have Objectives:}{11}{}%
+\contentsline {subsection}{\numberline {15.2}Additional Objectives (Exploration if Time Allows):}{11}{}%

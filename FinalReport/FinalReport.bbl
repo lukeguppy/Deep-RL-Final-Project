@@ -1,0 +1,65 @@
+\begin{thebibliography}{10}
+
+\bibitem{accident-types-and-causes}
+L.~Vogel and C.~J. Bester, ``A relationship between accident types and
+  causes.''
+
+\bibitem{gov-crash-stats}
+D.~O. Transport, ``Reported road casualties great britain, annual report:
+  2022,'' 2022.
+
+\bibitem{Crash-human-causes}
+D.~Shinar, ``Crash causes, countermeasures, and safety policy implications,''
+  {\em Accident Analysis and Prevention}, vol.~125, pp.~224--231, 2019.
+
+\bibitem{Predictive-reward-function-for-ai-driving}
+D.~Hayashi, Y.~Xu, T.~Bando, and K.~Takeda, ``A predictive reward function for
+  human-like driving based on a transition model of surrounding environment,''
+  in {\em 2019 International Conference on Robotics and Automation (ICRA)},
+  pp.~7618--7624, 2019.
+
+\bibitem{Racing-reward-functions}
+T.~Kohsuke, S.~Yuta, O.~Yuichi, and S.~Taro, ``Design of reward functions for
+  rl-based high-speed autonomous driving,'' in {\em 2022 IEEE 15th
+  International Symposium on Embedded Multicore/Many-core Systems-on-Chip
+  (MCSoC)}, pp.~32--37, 2022.
+
+\bibitem{Deep-RL-for-racing-driving}
+S.~Wang, D.~Jia, and X.~Weng, ``Deep reinforcement learning for autonomous
+  driving,'' 2019.
+
+\bibitem{General-overview-of-ai-driving}
+S.~A. Bagloee, M.~Tavana, M.~Asadi, and T.~Oliver, ``Autonomous vehicles:
+  challenges, opportunities, and future implications for transportation
+  policies,'' {\em Journal of Modern Transportation}, vol.~24, 2016.
+
+\bibitem{Collision-avoidance-in-lane-free-traffic-neural-system}
+A.~Karalakou, D.~Troullinos, G.~Chalkiadakis, and M.~Papageorgiou, ``Deep
+  reinforcement learning reward function design for autonomous driving in
+  lane-free traffic,'' {\em Systems}, vol.~11, no.~3, 2023.
+
+\bibitem{Deep-RL-for-AI-driving-general-overview}
+B.~R. Kiran, I.~Sobh, V.~Talpaert, P.~Mannion, A.~A.~A. Sallab, S.~Yogamani,
+  and P.~Pérez, ``Deep reinforcement learning for autonomous driving: A
+  survey,'' {\em IEEE Transactions on Intelligent Transportation Systems},
+  vol.~23, no.~6, pp.~4909--4926, 2022.
+
+\bibitem{Collision-frequency-ai-and-humans}
+W.~B. Knox, A.~Allievi, H.~Banzhaf, F.~Schmitt, and P.~Stone, ``Reward
+  (mis)design for autonomous driving,'' {\em Artificial Intelligence},
+  vol.~316, p.~103829, 2023.
+
+\bibitem{Deep-learning-for-AI-driving}
+K.~Muhammad, A.~Ullah, J.~Lloret, J.~D. Ser, and V.~H.~C. de~Albuquerque,
+  ``Deep learning for safe autonomous driving: Current challenges and future
+  directions,'' {\em IEEE Transactions on Intelligent Transportation Systems},
+  vol.~22, no.~7, pp.~4316--4336, 2021.
+
+\bibitem{PPO-MLAgents}
+V.~Pierre, ``Training with proximal policy optimization,'' 2018.
+
+\bibitem{PPO-Algorithms}
+J.~Schulman, F.~Wolski, P.~Dhariwal, A.~Radford, and O.~Klimov, ``Proximal
+  policy optimization algorithms,'' 2017.
+
+\end{thebibliography}
