@@ -72,19 +72,14 @@ T.~Kohsuke, S.~Yuta, O.~Yuichi, and S.~Taro, ``Design of reward functions for
   International Symposium on Embedded Multicore/Many-core Systems-on-Chip
   (MCSoC)}, pp.~32--37, 2022.
 
-\bibitem{Deep-RL-for-racing-driving}
-S.~Wang, D.~Jia, and X.~Weng, ``Deep reinforcement learning for autonomous
-  driving,'' 2019.
-
 \bibitem{General-overview-of-ai-driving}
 S.~A. Bagloee, M.~Tavana, M.~Asadi, and T.~Oliver, ``Autonomous vehicles:
   challenges, opportunities, and future implications for transportation
   policies,'' {\em Journal of Modern Transportation}, vol.~24, 2016.
 
-\bibitem{Collision-avoidance-in-lane-free-traffic-neural-system}
-A.~Karalakou, D.~Troullinos, G.~Chalkiadakis, and M.~Papageorgiou, ``Deep
-  reinforcement learning reward function design for autonomous driving in
-  lane-free traffic,'' {\em Systems}, vol.~11, no.~3, 2023.
+\bibitem{camera_only}
+B.~Dickson, ``Is camera-only the future of self-driving cars?,'' {\em
+  TechCrunch}, 2016.
 
 \bibitem{Deep-RL-for-AI-driving-general-overview}
 B.~R. Kiran, I.~Sobh, V.~Talpaert, P.~Mannion, A.~A.~A. Sallab, S.~Yogamani,
@@ -92,10 +87,9 @@ B.~R. Kiran, I.~Sobh, V.~Talpaert, P.~Mannion, A.~A.~A. Sallab, S.~Yogamani,
   survey,'' {\em IEEE Transactions on Intelligent Transportation Systems},
   vol.~23, no.~6, pp.~4909--4926, 2022.
 
-\bibitem{Collision-frequency-ai-and-humans}
-W.~B. Knox, A.~Allievi, H.~Banzhaf, F.~Schmitt, and P.~Stone, ``Reward
-  (mis)design for autonomous driving,'' {\em Artificial Intelligence},
-  vol.~316, p.~103829, 2023.
+\bibitem{tesla_fleet}
+Y.~Bouchard, ``The five pillars of tesla’s large-scale fleet learning
+  approach to autonomous driving,'' {\em Medium}, 2019.
 
 \bibitem{PPO-MLAgents}
 V.~Pierre, ``Training with proximal policy optimization,'' 2018.

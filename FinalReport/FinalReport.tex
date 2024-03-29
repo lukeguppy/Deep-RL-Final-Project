@@ -17,35 +17,30 @@
 \author{
      \\
      \\
-     \\
-     \\
-     \\
-     \\
-     \\
-\textbf{Luke Guppy} \\
+\textbf{By Luke Guppy} \\
     \\
     \\
     \\
     \\
-    \\
-    \\
+\centerline{\rule{10cm}{0.4pt}}\\
     \\
     \\
 \textbf{University of Warwick} \\
 \\
 Department of Computer Science \\
 \\
-Year of Study: $3^{rd}$ \\
-\\
 Supervisor: Andrew Hague \\
 \\
-2024 }
+Year of Study: $3^{rd}$ \\
+\\
+2024 \\
+    \\
+\centerline{\rule{10cm}{0.4pt}}
+}
 \date{}
 
 \begin{document}
-
 \maketitle
-
 \newpage
 
 \section*{Abstract}
@@ -63,6 +58,7 @@ Self-driving cars, Reinforcement learning, Autonomous agents, Simulation environ
 
 \tableofcontents
 \newpage
+
 
 \section{Introduction to the Project}
 
@@ -90,11 +86,11 @@ Through the convergence of advancements in self-driving technology, deep reinfor
 \begin{itemize}
     \item \textbf{Develop a Realistic Simulation Environment:} Create a Unity-based simulation environment that abstracts real-world driving scenarios, focusing on essential features while omitting minor details.
     
-    \item \textbf{Design and Implement Learning Agents:} Develop reinforcement learning agents for the cars, ensuring they can navigate the simulation environment effectively and adapt to changing conditions.
+    \item \textbf{Design and Implement Learning Agents:} Develop a reinforcement learning agent, ensuring it can navigate the simulation environment effectively.
     
-    \item \textbf{Conduct In-Depth Research:} Carry out comprehensive research on AI-driven cars, traffic dynamics, and human behaviour to inform the development of the simulation and learning agents.
+    \item \textbf{Conduct In-Depth Research:} Carry out comprehensive research on AI-driven cars, traffic dynamics, and human behaviour to inform the development of the simulation and learning agent.
     
-    \item \textbf{Training and Performance Analysis:} Train the AI agents and conduct rigorous performance analysis on the relevant features such as safety, speed, efficiency, and other metrics.
+    \item \textbf{Training and Performance Analysis:} Train the AI agents and conduct rigorous performance analysis on the relevant features.
     
     \item \textbf{Varied Situations:} Provide a series of different situations for learning (e.g., traffic lights, cross junctions, t-junctions, pedestrians) to challenge the AI cars to learn more general and applicable behaviours.
     
@@ -103,6 +99,7 @@ Through the convergence of advancements in self-driving technology, deep reinfor
 \end{itemize}
 
 In adapting my core objectives to better suit the specific focus of the project, slight adjustments were made to better align with its goals. While developing a Unity-based simulation environment with a learning agent navigating it, the project's scope shifted towards a more targeted exploration of curriculum learning for self-driving cars. Rather than aiming for an exploration of human-AI interaction, the project concentrated on analysing the implementation of behaviours using curriculum learning techniques. The slight impact this had on the objectives was a change in the measure of success from being based on safety, speed and efficiency to the quality of learning of the agent. This shift now focuses the project more on how to implement behaviours as opposed to investigating a wholistic view of the self-driving world.
+
 
 \section{Background Research}
 
@@ -139,61 +136,36 @@ Extending the existing areas of research, this project implements a series of in
 
 The environment has a specific focus on scenarios with the highest real-world collision rates, such as straight roads, cross-junctions, and T-junctions \cite{accident-types-and-causes}. By honing in on these critical driving situations, this project aims to improve our understanding of how AI-driven cars can incrementally learn behaviours to navigate environments which are at the forefront of causing human casualties. \\
 
-Key areas of research:
-\begin{itemize}
-    \item Road sections with the highest collision rates \cite{accident-types-and-causes}
-    \item Existing reward functions for driving simulations \cite{Predictive-reward-function-for-ai-driving} \cite{Racing-reward-functions} \cite{Deep-RL-for-racing-driving} 
-    \item Sensory inputs and visualisation of the environment \cite{General-overview-of-ai-driving}
-    \item Inputs and outputs of neural networks for learning in automated vehicles \cite{Collision-avoidance-in-lane-free-traffic-neural-system} \cite{Deep-RL-for-AI-driving-general-overview}
-    \item Relationships between AI and human behaviours \cite{Collision-frequency-ai-and-humans} 
-    \item Current progress and future plans for self-driving cars \cite{Deep-learning-for-AI-driving}
-\end{itemize}
-
 \subsubsection{Road Sections with the Highest Collision Rates}
 Understanding road sections with the highest collision rates is important for improving overall road safety. Research highlights the significance of identifying these areas for autonomous cars to be able to safely navigate. Analysing accident types and causes can provide valuable insights into factors contributing to collisions. It is shown that the road environments which cause the highest rate of serious collisions are those at junctions, specifically cross-junctions and T-junctions \cite{accident-types-and-causes}. This gives a scope to research and implement these specific areas as it is imperative for a self-driving agent to be able to safely navigate them so they provide a complex training environment for a self-driving agent.
 
 \subsubsection{Existing Reward Functions for Driving Simulations}
+\label{sec:existing-rewards}
 The development of effective reward functions is crucial for training AI agents in driving simulations. The models explored in section \ref{sec:related-work} and numerous other studies have explored various reward functions tailored to specific driving scenarios. These functions play a vital role in shaping the behaviour of AI agents, incentivising desired actions such as smooth lane changes, efficient overtaking manoeuvres, and adherence to traffic rules. It is often difficult to find the right balance to imitate human behaviours as small adjustments can make the agent too passive or aggressive and drive inefficiently \cite{Predictive-reward-function-for-ai-driving}.\\ 
 
-Another key feature of the reward function is to implement effective speed and path following behaviours. This is a largely explored area of autonomous cars with many studies specifically focussing on racing lines and optimal driving for speed \cite{Racing-reward-functions}. Even though in this project the agent is not in a racing scenario, these implementations give good insight as how to approach corner turning for an autonomous agent and specifically how it can view a corner using current and future targets to informatively analyse a turn. \cite{Deep-learning-for-AI-driving}
+Another key feature of the reward function is to implement effective speed and path following behaviours. This is a largely explored area of autonomous cars with many studies specifically focussing on racing lines and optimal driving for speed \cite{Racing-reward-functions}. Even though in this project the agent is not in a racing scenario, these implementations give good insight as how to approach corner turning for an autonomous agent and specifically how it can view a corner using current and future targets to informatively analyse a turn \cite{Deep-learning-for-AI-driving}.
 
 \subsubsection{Sensory Inputs and Visualisation of the Environment}
-The integration of sensory inputs and effective visualisation techniques is essential for AI-driven vehicles to perceive and navigate their environments accurately. Research provides a comprehensive overview of AI driving systems \cite{General-overview-of-ai-driving}, emphasising the importance of sensory data processing and environment visualisation. By leveraging advanced sensor technologies such as LiDAR, radar, and cameras, AI vehicles can gather real-time information about their surroundings and make informed decisions. Additionally, innovative visualisation methods enhance situational awareness, enabling AI systems to interpret complex traffic scenarios and respond appropriately to dynamic changes in the environment. In the case of the agent in this project, these systems will be simplified assuming perfect knowledge of the environment as these systems are in themselves a separate branch of autonomous driving.
+\label{sec:Sensory-Inputs}
+The integration of sensory inputs and effective visualisation techniques is essential for AI-driven vehicles to perceive and navigate their environments accurately. Research provides a comprehensive overview of AI driving systems \cite{General-overview-of-ai-driving}, emphasising the importance of sensory data processing and environment visualisation. By leveraging advanced sensor technologies, AI vehicles can gather real-time information about their surroundings and make informed decisions. Additionally, innovative visualisation methods enhance situational awareness, enabling AI systems to interpret complex traffic scenarios and respond appropriately to dynamic changes in the environment.\\ 
+
+The specific implementation of these observations varies between manufacturers from more expensive lidar, sonar and radar technology \cite{General-overview-of-ai-driving} being used to map the environment, to a simple accumulation of cameras and machine learning \cite{camera_only} to categorise and understand the environment but ultimately all result in an accumulation of the same information with varying accuracy.
 
 \subsubsection{Inputs and Outputs of Neural Networks for Learning in Automated Vehicles}
-Neural networks (NNs) serve as fundamental components of learning algorithms in automated vehicles, influencing both input data processing and output decision-making. Existing research extensively explores the intricacies of neural network architectures tailored to collision avoidance and general AI driving tasks \cite{Deep-RL-for-AI-driving-general-overview}. These studies explore the role of neural networks in processing sensory inputs, such as vehicle trajectories and environmental data, to generate appropriate control commands. By understanding common sensory inputs for NNs in autonomous driving, the agent can be given an accurate model of how it could perceive the world and information that can be infered about the environment.
+Neural networks (NNs) serve as fundamental components of learning algorithms in automated vehicles, influencing both input data processing and output decision-making. Existing research extensively explores the intricacies of neural network architectures tailored to collision avoidance and general AI driving tasks \cite{Deep-RL-for-AI-driving-general-overview}. These studies explore the role of neural networks in processing sensory inputs, such as vehicle trajectories and environmental data, to generate appropriate control commands.\\
+
+By understanding common sensory inputs for NNs in autonomous driving (as discussed in \ref{sec:Sensory-Inputs}), the agent can be given an accurate model of how it could perceive the world in a real-world scenario and what information can be infered about the environment. In the case of the agent in this project, these systems will be simplified assuming perfect knowledge of the environment as these systems are in themselves a separate branch of autonomous driving. \\
+
+The assumed knowledge and sensed inputs vary with each reward curriculum but include features such as information about the center of the lane, the edge of the road, the relative velocity of other vehicles, information about the agent car itself and other features to create a wholistic understanding of the environment and the agents relation within it.
 
 \subsubsection{Relationships Between AI and Human Behaviours}
-\cite{Predictive-reward-function-for-ai-driving}
-Examining the relationships between AI and human behaviours is essential for ensuring safe interactions between autonomous vehicles and human drivers. The main aim of self-driving cars is to imitate human driving in an optimised, safe and efficient manner.
+Examining the relationships between AI and human behaviours is essential for ensuring safe interactions between autonomous vehicles and human drivers. The main aim of self-driving cars is to imitate human driving in an optimised, safe and efficient manner. ``Ideal behaviour" is a relatively abstract and subjective topic and this is approached differently with each implementation whether it is to follow some set of rules or to immitate human behaviour gathered from a large data set - such as how Tesla processes the data of its users to train autonomous cars in fleet learning \cite{tesla_fleet}.\\
 
-\subsubsection{Current Progress and Future Plans for Self-Driving Cars}
-Assessing the current progress and outlining future plans for self-driving cars is crucial for guiding research and development efforts in the automotive industry. Research by Martinez et al. \cite{Deep-learning-for-AI-driving} provides insights into the advancements in deep learning techniques for AI driving applications. By reviewing recent developments and discussing future directions, this study offers a roadmap for advancing self-driving technology. By aligning research agendas with emerging trends and technological breakthroughs, stakeholders can accelerate the deployment of self-driving cars and realise their potential benefits in terms of safety, efficiency, and mobility accessibility.
+A key area of importance for mimicking human behaviour is that of how aggressive or passive to make the agent. As mentioned in \ref{sec:Sensory-Inputs}, finding the balance between confidence and hesitancy/safety is a crucial factor for how successful an AI is. This has proven to be a difficult balance which even the most advanced self-driving systems struggle with. Junctions are massively affected by this balance and small adjustments can drastically affect the wait time and thus (in)efficiency of the agent \cite{Predictive-reward-function-for-ai-driving}. This problem is not so significant in an environment controlled by traffic lights as the lights guide the cars in an effective manner and reduce significance of hesistancy and thus a ``smart" traffic light system could effectively replace the need for these decisions while maintaining efficient road systems.
 
-\subsection{Summary Of Research}
-\subsubsection{Foundation}
-The research started with a general overview of the current situation and progress of AI driving in the world. This meant understanding how sensors work, what features of the road the AIs use and other relevant features. It appears that there is a surprising number of sensors of various types: Cameras, Lidar, Radar, Ultrasonic, Infrared (for lanes) and GPS \cite{General-overview-of-ai-driving} which all have various strengths and weaknesses in the real world. In the simulation this can be heavily abstracted by the use of ray-casts and directly feeding information.
+\subsubsection{Summary}
+In summary, this research in the field of autonomous driving and DRL agent implementations gives an overview of the current state of this research environment. By focusing on critical driving scenarios with high collision rates, refining reward functions, and understanding human-AI behavioural dynamics, the project gains valuable insights essential for creating functional and a safe autonomous driving agent. These insights contribute to enhancing the accuracy of the simulated driving environment and how it can represent an abstraction of the real world, aligning with the project's objectives of developing a robust curriculum learning framework.
 
-\subsubsection{Collision Occurrence}
-\lipsum[2][1]
-
-\subsubsection{Existing Implementations}
-\lipsum[2][1]
-
-\subsubsection{High Level Overview}
-\lipsum[2][1]
-
-\subsection{Deep-Reinforcement Learning}
-\lipsum[2][1]
-
-\subsubsection{Reinforcement Learning}
-\lipsum[2][1]
-
-\subsubsection{Deep Neural Networks}
-\lipsum[2][1]
-
-\subsection{Curriculum Learning}
-\lipsum[2][1]
 
 \section{Technical Aspects}
 \lipsum[2][1]
@@ -204,6 +176,9 @@ The research started with a general overview of the current situation and progre
 ML-Agents benefits from an active community and extensive documentation, making it easy to implement and troubleshoot problems encountered with the project. The community support is invaluable for addressing challenges, seeking solutions, and staying updated on best practices during the development of the project.
 
 \subsection{Deep-Reinforcement Learning}
+\lipsum[2][1]
+
+\subsection{Curriculum Learning}
 \lipsum[2][1]
 
 \subsection{ML-Agents}
@@ -258,6 +233,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 \subsection{Git}
 \lipsum[2][1]
 
+
 \section{Project Management}
 
 \subsection{Methodology}
@@ -265,6 +241,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 
 \subsection{Timeline And Milestones}
 \lipsum[2][1]
+
 
 \section{The Simulation Environment}
 \lipsum[2][1]
@@ -302,6 +279,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 \subsubsection{Smart Traffic}
 \lipsum[2][1]
 
+
 \section{The Agent}
 \lipsum[2][1]
 
@@ -328,6 +306,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 
 \subsubsection{Hyper-parameters}
 \lipsum[2][1]
+
 
 \section{Reward Systems}
 \lipsum[2][1]
@@ -359,6 +338,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 \subsubsection{Environmental Cars}
 \lipsum[2][1]
 
+
 \section{Results}
 \lipsum[2][1]
 
@@ -381,6 +361,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 \subsection{Final Reward System}
 \lipsum[2][1]
 
+
 \section{Conclusion}
 \lipsum[2][1]
 
@@ -392,6 +373,7 @@ It was chosen by ML-Agents due to its promising results over these other popular
 
 \subsection{Achievement Discussion}
 \lipsum[2][1]
+
 
 \section{Evaluation}
 
@@ -430,4 +412,3 @@ It was chosen by ML-Agents due to its promising results over these other popular
 \bibliographystyle{ieeetr} 
 
 \end{document}
-
