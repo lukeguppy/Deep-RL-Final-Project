@@ -1,16 +1,64 @@
 \begin{thebibliography}{10}
 
+\bibitem{Deep-learning-for-AI-driving}
+K.~Muhammad, A.~Ullah, J.~Lloret, J.~D. Ser, and V.~H.~C. de~Albuquerque,
+  ``Deep learning for safe autonomous driving: Current challenges and future
+  directions,'' {\em IEEE Transactions on Intelligent Transportation Systems},
+  vol.~22, no.~7, pp.~4316--4336, 2021.
+
+\bibitem{mckinsey_autonomous_vehicles}
+M.~C. for Future~Mobility, ``The future of autonomous vehicles (av),'' {\em
+  McKinsey}, 2023.
+
+\bibitem{robust_deep_learning}
+L.~Schott, J.~Delas, H.~Hajri, E.~Gherbi, R.~Yaich, N.~Boulahia-Cuppens,
+  F.~Cuppens, and S.~Lamprier, ``Robust deep reinforcement learning through
+  adversarial attacks and training: A survey,'' {\em arXiv preprint
+  arXiv:2403.00420}, 2024.
+
+\bibitem{junction_driving}
+Z.~Cao and J.~Yun, ``Self-awareness safety of deep reinforcement learning in
+  road traffic junction driving,'' {\em arXiv preprint arXiv:2201.08116}, 2022.
+
+\bibitem{automatic_curriculum}
+C.~Romac, R.~Portelas, K.~Hofmann, and P.-Y. Oudeyer, ``Teachmyagent: a
+  benchmark for automatic curriculum learning in deep rl,'' in {\em Proceedings
+  of the 38th International Conference on Machine Learning} (M.~Meila and
+  T.~Zhang, eds.), vol.~139 of {\em Proceedings of Machine Learning Research},
+  pp.~9052--9063, PMLR, 18--24 Jul 2021.
+
+\bibitem{human_curriculum_learning}
+X.~Wang, Y.~Chen, and W.~Zhu, ``A survey on curriculum learning,'' {\em arXiv
+  preprint arXiv:2010.13166}, 2021.
+
+\bibitem{sim2real}
+K.~Voogd, J.~P. Allamaa, J.~Alonso-Mora, and T.~D. Son, ``Reinforcement
+  learning from simulation to real world autonomous driving using digital
+  twin,'' 2022.
+
+\bibitem{personalized_autonomous_driving}
+J.~Chen, T.~Wu, M.~Shi, and W.~Jiang, ``Learning personalized autonomous
+  driving behavior with progressively optimized reward function,'' {\em
+  Sensors}, vol.~20, no.~19, p.~5626, 2020.
+
+\bibitem{autonomous_driving_deep_q_learning}
+A.~Names, ``Autonomous driving system based on deep q learning,'' {\em Journal
+  of Intelligent Transportation Systems}, pp.~XX--XX, 2018.
+
+\bibitem{reward_function_lane_free_driving}
+A.~Karalakou, D.~Troullinos, G.~Chalkiadakis, and M.~Papageorgiou, ``Deep
+  reinforcement learning reward function design for autonomous driving in
+  lane-free traffic,'' {\em Systems}, vol.~11, no.~3, p.~134, 2023.
+
+\bibitem{hierarchical_rl_multi_lane_driving}
+M.~S. Nosrati, E.~A. Abolfathi, M.~Elmahgiubi, P.~Yadmellat, J.~Luo, Y.~Zhang,
+  H.~Yao, H.~Zhang, and A.~Jamil, ``Towards practical hierarchical
+  reinforcement learning for multi-lane autonomous driving,'' in {\em NIPS 2018
+  Workshop MLITS}, 2018.
+
 \bibitem{accident-types-and-causes}
 L.~Vogel and C.~J. Bester, ``A relationship between accident types and
   causes.''
-
-\bibitem{gov-crash-stats}
-D.~O. Transport, ``Reported road casualties great britain, annual report:
-  2022,'' 2022.
-
-\bibitem{Crash-human-causes}
-D.~Shinar, ``Crash causes, countermeasures, and safety policy implications,''
-  {\em Accident Analysis and Prevention}, vol.~125, pp.~224--231, 2019.
 
 \bibitem{Predictive-reward-function-for-ai-driving}
 D.~Hayashi, Y.~Xu, T.~Bando, and K.~Takeda, ``A predictive reward function for
@@ -48,12 +96,6 @@ B.~R. Kiran, I.~Sobh, V.~Talpaert, P.~Mannion, A.~A.~A. Sallab, S.~Yogamani,
 W.~B. Knox, A.~Allievi, H.~Banzhaf, F.~Schmitt, and P.~Stone, ``Reward
   (mis)design for autonomous driving,'' {\em Artificial Intelligence},
   vol.~316, p.~103829, 2023.
-
-\bibitem{Deep-learning-for-AI-driving}
-K.~Muhammad, A.~Ullah, J.~Lloret, J.~D. Ser, and V.~H.~C. de~Albuquerque,
-  ``Deep learning for safe autonomous driving: Current challenges and future
-  directions,'' {\em IEEE Transactions on Intelligent Transportation Systems},
-  vol.~22, no.~7, pp.~4316--4336, 2021.
 
 \bibitem{PPO-MLAgents}
 V.~Pierre, ``Training with proximal policy optimization,'' 2018.
