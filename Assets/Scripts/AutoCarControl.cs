@@ -206,9 +206,9 @@ public class AutoCarControl : MonoBehaviour
 
         float distanceToStop = stopLocalPosition.magnitude;
         float distanceToFinish = finishLocalPosition.magnitude;
-        float brakeDistance = currentSpeed + currentSpeed*currentSpeed/carController.MaxSpeed;
+        float brakeDistance = currentSpeed + currentSpeed * currentSpeed/carController.MaxSpeed;
 
-        if ((distanceToStop > 25f || nextStop.slow || nextStop.stop || (nextStop.stopPoint && nextFinish.active >= nextFinish.carLimit)) 
+        if ((distanceToStop > carController.MaxSpeed || nextStop.slow || nextStop.stop || (nextStop.stopPoint && nextFinish.active >= nextFinish.carLimit)) 
             && distanceToStop < distanceToNearestVehicle 
             && distanceToNearestVehicle > stopDistance
             || distanceToStop < 15 && currentSpeed > 12.5)

@@ -5,7 +5,6 @@ behaviors:
     hyperparameters:
       batch_size: 250 # Number of experiences in each iteration of gradient descent
       # PPO: Number of experiences to collect before updating the policy model
-      # SAC: The max size of the experience buffer - on the order of thousands of times longer than your episodes
       buffer_size: 5000 # PPO: 2048 - 409600; SAC: 50000 - 1000000
       learning_rate: 0.0003 # Typical range: 1e-5 - 1e-3
       beta: 0.003 # Typical range: 1e-4 - 1e-2. Strength of the entropy regularization, which makes the policy "more random." 

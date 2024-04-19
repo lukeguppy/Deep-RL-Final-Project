@@ -231,23 +231,42 @@ public class CarAgent : Agent
 
         if (nextStop.stop || nextStop.slow)
         {
-            if (scaledStopDistance >= 0 && scaledStopDistance <= 5f) lightRatio = 1f - 0.1f * Math.Max(0, forwardVelocity);
-            else if (forwardVelocity > scaledStopDistance - 5 && scaledStopDistance > 0 && (scaledStopDistance - 5f) < carController.MaxSpeed) lightRatio = (scaledStopDistance - 5f) / Math.Max(scaledStopDistance - 5f, forwardVelocity);
+            if (scaledStopDistance >= 0 && scaledStopDistance <= 5f)
+            {
+                lightRatio = 1f - 0.1f * Math.Max(0, forwardVelocity);
+            }
+            else if (forwardVelocity > scaledStopDistance - 5 && scaledStopDistance > 0 && (scaledStopDistance - 5f) < carController.MaxSpeed)
+            {
+                lightRatio = (scaledStopDistance - 5f) / Math.Max(scaledStopDistance - 5f, forwardVelocity);
+            }
+            if (nextStop == currentTarget && nextStopDotProduct < 0)
+            {
+                lightRatio = scaledStopDistance / 5f;
 
-            if (nextStop == currentTarget && nextStopDotProduct < 0) lightRatio = scaledStopDistance / 5f;
+            }
         }
 
-        float carRatio; // Add reward for slowing for cars;
+        float carRatio; // Reward scalar for slowing for cars
 
-        if (carInfrontDistance >= 0 && carInfrontDistance <= 7.5f) carRatio = 1f - 0.5f *  Math.Max(0, carInfrontRelativeVelocity);
-        else carRatio = (carInfrontDistance - 7.5f) / Math.Max(carInfrontDistance - 7.5f, carInfrontRelativeVelocity);
+        if (carInfrontDistance >= 0 && carInfrontDistance <= 7.5f)
+        {
+            carRatio = 1f - 0.5f * Math.Max(0, carInfrontRelativeVelocity);
+        }
+        else
+        {
+            carRatio = (carInfrontDistance - 7.5f) / Math.Max(carInfrontDistance - 7.5f, carInfrontRelativeVelocity);
+        }
 
-        reward += (carRatio < 0 || lightRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(carRatio*lightRatio * centerRatio * angleRatio * distanceChange)) : (carRatio*lightRatio * centerRatio * angleRatio * distanceChange);
+        reward += (carRatio < 0 || lightRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(carRatio * lightRatio * centerRatio * angleRatio * distanceChange)) : (carRatio * lightRatio * centerRatio * angleRatio * distanceChange);
 
-        if (forwardVelocity < 0) reward += 0.1f * forwardVelocity;
-
-        if (currentTarget == nextStop && nextStopDotProduct < 0) reward -= 0.25f;
-
+        if (forwardVelocity < 0)
+        {
+            reward += 0.1f * forwardVelocity;
+        }
+        if (currentTarget == nextStop && nextStopDotProduct < 0)
+        {
+            reward -= 0.25f;
+        }
         if (!((currentTarget.stop || currentTarget.slow) && (carInfrontDistance < carController.MaxSpeed || targetDistance < carController.MaxSpeed)))
         {
             reward -= 0.05f;
@@ -284,43 +303,6 @@ public class CarAgent : Agent
         float scaledTargetDistance = dotProduct * targetDistance;
 
         float stopRatio = FindStopRatio(carInfrontRelativeVelocity, dotProduct);
-
-        /*float carRatio = Math.Max(-1f, (carInfrontRelativeVelocity <= 0) ? 1 : Math.Min((carInfrontDistance - 7.5f) / carInfrontRelativeVelocity, 1));
-        float lightRatio;
-
-        if (currentTarget.stop || currentTarget.slow)
-        {
-            lightRatio = (scaledTargetDistance >= 0f && scaledTargetDistance <= 2.5f) ? 1 : Math.Max(-1,Math.Min((scaledTargetDistance - 2.5f) / forwardVelocity, 1));
-        }
-        else
-        {
-            lightRatio = 1f;
-
-        }*/
-
-        //float stopDistance = Math.Min(targetDistance - 2.5f, Math.Max(0,carInfrontDistance - Math.Max(0,carInfrontRelativeVelocity) - 7.5f));
-        //float stopRatio = Math.Min(carRatio, lightRatio);
-        //Debug.Log(carRatio + "  " + lightRatio + "  " + stopRatio);
-
-        /*float stopRatio = 1;
-
-        if (currentTarget.stop || currentTarget.slow)
-        {
-            if (carInfrontDistance < targetDistance)
-            {
-                if (carInfrontDistance <= 7.5f) stopRatio = 1f; 
-                else stopRatio = (carInfrontDistance - 7.5f) / Math.Max(carInfrontDistance - 7.5f, carInfrontRelativeVelocity);
-            }
-            else
-            {
-                if (targetDistance <= 2.5f) stopRatio = forwardVelocity * 0.1f;
-                else if (dotProduct < 0f) stopRatio = -targetDistance / 2.5f;
-                else stopRatio = 1 - Math.Max(0, 0.1f * (forwardVelocity - (targetDistance - 2.5f)));
-            }
-        }*/
-        //Debug.Log(stopRatio);
-
-
 
         reward += (stopRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(stopRatio * centerRatio * angleRatio * distanceChange)) : (stopRatio * centerRatio * angleRatio * distanceChange);
 
@@ -407,6 +389,7 @@ public class CarAgent : Agent
 
         // Get reward
 
+        // Episode reset conditions turned off when applying the brain model
 /*        if (collided)
         {
             AddReward(crashReward);

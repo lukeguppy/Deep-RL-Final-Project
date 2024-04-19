@@ -1,8 +1,8 @@
 13/02
 Reward: 
 	weighted sum of: 
-		+ angle / 180
-		+ (1 - distance normalised)
+		- (angle - 2.5) / 180
+		- (1 - distance normalised)
 		- (1 - speed/max speed)
 Config:
     hyperparameters:
@@ -30,7 +30,7 @@ Config:
 
       gail:
         gamma: 0.99
-        strength: 0.01
+        strength: 0.1
         network_settings:
           normalize: false
           hidden_units: 128

@@ -1,9 +1,9 @@
 13/02
 Reward: 
 	weighted sum of: 
-		+ angle / 180
-		+ (1 - distance normalised)
-		+ (1 - speed/max speed)
+		+ 1 - angle / 180
+		+ 1 - distance normalised
+		+ 1 - speed/max speed
 Config:
     hyperparameters:
       batch_size: 64
