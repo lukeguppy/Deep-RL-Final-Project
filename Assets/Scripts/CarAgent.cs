@@ -17,47 +17,57 @@ using TMPro;
 
 public class CarAgent : Agent
 {
-    [SerializeField]
-    private CarController carController;
-    [SerializeField]
-    private AIEnvironmentControl environmentController;
+    // References to the car controller and environment controller
+    [SerializeField] private CarController carController;
+    [SerializeField] private AIEnvironmentControl environmentController;
 
+    // Flags for collision and out-of-bounds detection
     private bool collided = false;
     private bool oob = false;
+
+    // Variables for current and next target positions
     private Target currentTarget;
     private Target nextTarget;
     private Target nextStop;
 
-    [SerializeField]
-    private Vector2 directionToTarget;
+    // Direction vectors and angles to targets
+    [SerializeField] private Vector2 directionToTarget;
     private Vector2 directionToNextTarget;
-    [SerializeField]
-    private Vector2 directionToNextStop;
-
+    [SerializeField] private Vector2 directionToNextStop;
     private float targetAngle;
     private float nextTargetAngle;
     private float nextStopAngle;
 
+    // Distances to targets and forward velocity
     private float targetDistance;
     private float nextTargetDistance;
     private float nextStopDistance;
-
     private float forwardVelocity;
+
+    // Relative velocity of the car in-front
     private float carInfrontRelativeVelocity;
 
+    // Steering, acceleration, and braking values
     private float steer, accelerate, brake = 0;
 
+    // Rewards for reaching target and crashing
     private float targetReward = 25f;
     private float crashReward = -50f;
 
+    // Time of last target reached
     public float timeOfLastTarget = 0;
+
+    // Previous distance to target
     private float previousDistance = 0;
 
+    // Flag for reaching target
     private bool reachedTarget = true;
 
+    // Lane center angle and distance
     private float centerAngle;
     private float centerDistance;
 
+    // Nearest car in front and related variables
     private GameObject carInfront;
     private float carInfrontDistance;
 
@@ -67,6 +77,7 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        // Restart the car, intitialise the time and initialise the target information
         environmentController.Restart();
         timeOfLastTarget = Time.time;
 
@@ -92,12 +103,14 @@ public class CarAgent : Agent
         
         float stateReward = 0f;
 
+        // Use the current reward function based on the stage in the curriculum
 
         //stateReward = Reward1();
         //stateReward = Reward2();
         //stateReward = Reward3();
         stateReward = Reward4();
 
+        // Update the previous distance for finding the change in distance
         previousDistance = targetDistance;
 
         return stateReward;
@@ -106,17 +119,19 @@ public class CarAgent : Agent
     private float Reward1()
     {
         float reward = 0f;
-        // REWARD 1 (car infront + angle + distance):
 
+        // The angle ratio to scale the reward 
         float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
 
+        // The change in distance clamped to avoid potential edge cases leading to large values
+        // Change in distance not used if the agent just reached a target
         float distanceChange = Math.Clamp((!reachedTarget) ? previousDistance - targetDistance : 0, -1, 1);
         reachedTarget = false;
 
-        //Debug.Log(distanceChange);
-
+        // Reward function
         reward += (distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(angleRatio * distanceChange)) : (angleRatio * distanceChange);
 
+        // Punish reversing
         if (forwardVelocity < 0) reward += 0.01f * forwardVelocity;
 
         return reward;
@@ -124,23 +139,23 @@ public class CarAgent : Agent
 
     private float Reward2()
     {
-        // REWARD 2 (+ lanes):
-
         float reward = 0f;
 
+        // Angle ratio from reward 1
         float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
 
+        // Change in distance from reward 1
         float distanceChange = Math.Clamp((!reachedTarget) ? previousDistance - targetDistance : 0, -1, 1);
         reachedTarget = false;
         //Debug.Log(distanceChange);
 
+        // Find the direction to the closest point on the center line
         Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
         Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
 
+        // Find the angle and distance to the closest point
         centerAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter);
         centerAngle = Mathf.Repeat(centerAngle + 180f, 360f) - 180f;
-        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
-
         float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
         float centerRatio = (1.6f - centerDist) / 1.6f;
 
@@ -156,31 +171,36 @@ public class CarAgent : Agent
         // REWARD 3 (+ lights):
 
         float reward = 0f;
+
+        // Angle ratio from reward 1
         float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
 
+        // Find the distance to the next traffic light
         float stopDistance = Vector2.Distance(new(nextStop.x, nextStop.z), new(transform.position.x, transform.position.z));
 
-        // set to 0.1 if it is at a stop point to substitute for encouraging moving distance
+        // set to 0.035 if it is at a stop point to substitute for encouraging moving distance
         float distanceChange = ((nextStop.stop || nextStop.slow) && ((stopDistance - 5f) < carController.MaxSpeed)) ? 0.035f : Math.Clamp((!reachedTarget) ? previousDistance - targetDistance : 0, -1, 1);
         //distanceChange = (!currentTarget.stop && !currentTarget.slow && forwardVelocity <= 0) ? -0.05f : distanceChange;
         reachedTarget = false;
 
+        // Find center ratio from reward 2
         Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
         Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
-
         centerAngle = Mathf.Repeat(Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter) + 180f, 360f) - 180f;
-        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
-
         float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
         float centerRatio = (1.6f - centerDist) / 1.6f;
 
+        // Dot product to signal if the next traffic light is ahead or behind
         float nextStopDotProduct = (Vector3.Dot(transform.forward, (nextStop.transform.position - transform.position).normalized) > 0) ? 1 : -1;
         float scaledStopDistance = nextStopDotProduct * stopDistance;
 
+        // Calculate the scalar for the traffic lights
         float lightRatio = 1;
 
+        // Change from 1 if the next light is red or amber
         if (nextStop.stop || nextStop.slow)
         {
+            // Apply the traffic light reward function
             if (scaledStopDistance >= 0 && scaledStopDistance <= 5f) lightRatio = 1f - 0.1f * Math.Max(0, forwardVelocity);
             else if (forwardVelocity > scaledStopDistance - 5 && scaledStopDistance > 0 && (scaledStopDistance - 5f) < carController.MaxSpeed) lightRatio = (scaledStopDistance - 5f) / Math.Max(scaledStopDistance - 5f, forwardVelocity);
 
@@ -188,15 +208,6 @@ public class CarAgent : Agent
         }
 
         reward += (lightRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(lightRatio * centerRatio * angleRatio * distanceChange)) : (lightRatio * centerRatio * angleRatio * distanceChange);
-
-        //if (forwardVelocity < 0) reward += 0.1f * forwardVelocity;
-
-        //if (dotProduct < 0) reward -= 0.25f;
-
-        if (!((currentTarget.stop || currentTarget.slow) && (carInfrontDistance < carController.MaxSpeed || targetDistance < carController.MaxSpeed)))
-        {
-            reward -= 0.05f;
-        }
 
         return reward;
     }
@@ -210,11 +221,11 @@ public class CarAgent : Agent
 
         float stopDistance = Vector2.Distance(new(nextStop.x, nextStop.z), new(transform.position.x, transform.position.z));
 
-        // set to 0.1 if it is at a stop point to substitute for encouraging moving distance
+        // set to 0.035 if it is at a red or amber light
         float distanceChange = ((nextStop.stop || nextStop.slow) && ((stopDistance - 5f) < carController.MaxSpeed)) ? 0.035f : Math.Clamp((!reachedTarget) ? previousDistance - targetDistance : 0, -1, 1);
-        //distanceChange = (!currentTarget.stop && !currentTarget.slow && forwardVelocity <= 0) ? -0.05f : distanceChange;
         reachedTarget = false;
 
+        // Calculate center reward from reward 2
         Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
         Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
 
@@ -227,6 +238,7 @@ public class CarAgent : Agent
         float nextStopDotProduct = (Vector3.Dot(transform.forward, (nextStop.transform.position - transform.position).normalized) > 0) ? 1 : -1;
         float scaledStopDistance = nextStopDotProduct * stopDistance;
 
+        // Calculate the traffic light ratio from reward 3
         float lightRatio = 1;
 
         if (nextStop.stop || nextStop.slow)
@@ -246,8 +258,10 @@ public class CarAgent : Agent
             }
         }
 
-        float carRatio; // Reward scalar for slowing for cars
+        // Reward scalar to slow for other cars
+        float carRatio; 
 
+        // Apply the environment car reward function
         if (carInfrontDistance >= 0 && carInfrontDistance <= 7.5f)
         {
             carRatio = 1f - 0.5f * Math.Max(0, carInfrontRelativeVelocity);
@@ -259,123 +273,21 @@ public class CarAgent : Agent
 
         reward += (carRatio < 0 || lightRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(carRatio * lightRatio * centerRatio * angleRatio * distanceChange)) : (carRatio * lightRatio * centerRatio * angleRatio * distanceChange);
 
-        if (forwardVelocity < 0)
-        {
-            reward += 0.1f * forwardVelocity;
-        }
-        if (currentTarget == nextStop && nextStopDotProduct < 0)
-        {
-            reward -= 0.25f;
-        }
-        if (!((currentTarget.stop || currentTarget.slow) && (carInfrontDistance < carController.MaxSpeed || targetDistance < carController.MaxSpeed)))
-        {
-            reward -= 0.05f;
-        }
-
         return reward;
     }
 
-    private float RewardFail()
-    {
-        // REWARD 3 (+ lights):
-
-        float reward = 0f;
-
-        float angleRatio = (90f - Math.Abs(targetAngle)) / 90f;
-
-        // set to 0.1 if it is at a stop point to substitute for encouraging moving distance
-        float distanceChange = ((currentTarget.stop || currentTarget.slow) && (carInfrontDistance < carController.MaxSpeed || targetDistance < carController.MaxSpeed)) ? 0.035f : (!reachedTarget) ? previousDistance - targetDistance : 0;
-        //distanceChange = (!currentTarget.stop && !currentTarget.slow && forwardVelocity <= 0) ? -0.05f : distanceChange;
-        reachedTarget = false;
-
-        Vector2 center = environmentController.ClosestPointOnCenterLine(transform.position);
-        Vector2 directionToCenter = new(center.x - transform.position.x, center.y - transform.position.z);
-
-        centerAngle = Mathf.Repeat(Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToCenter) + 180f, 360f) - 180f;
-        centerDistance = Vector2.Distance(new(transform.position.x, transform.position.z), center);
-
-        float centerDist = Vector2.Distance(center, new(transform.position.x, transform.position.z));
-        float centerRatio = (1.6f - centerDist) / 1.6f;
-
-        float carInfrontRelativeVelocity = (carInfront != null) ? environmentController.CalculateRelativeSpeedTowards(carInfront.GetComponent<Rigidbody>()) : 0f;
-
-        float dotProduct = (Vector3.Dot(transform.forward, (currentTarget.transform.position - transform.position).normalized) > 0) ? 1 : -1;
-        float scaledTargetDistance = dotProduct * targetDistance;
-
-        float stopRatio = FindStopRatio(carInfrontRelativeVelocity, dotProduct);
-
-        reward += (stopRatio < 0 || centerRatio < 0 || distanceChange < 0 || angleRatio < 0) ? (-1f * Math.Abs(stopRatio * centerRatio * angleRatio * distanceChange)) : (stopRatio * centerRatio * angleRatio * distanceChange);
-
-        //if (forwardVelocity < 0) reward += 0.1f * forwardVelocity;
-
-        //if (dotProduct < 0) reward -= 0.25f;
-
-        if (!((currentTarget.stop || currentTarget.slow) && (carInfrontDistance < carController.MaxSpeed || targetDistance < carController.MaxSpeed)))
-        {
-            reward -= 0.05f;
-        }
-
-            return reward;
-    }
-
-    private float FindStopRatio(float carInfrontRelativeVelocity, float dotProduct)
-    {
-        float stopRatio;
-        float carDistance = 7.5f;
-        float stopDistance = 5f;
-
-        // safe 2.5m stop zone (target within 2.5m infront)
-        float scaledTargetDist = targetDistance * dotProduct;
-        if (0f <= scaledTargetDist && scaledTargetDist <= stopDistance) return 1f;
-
-        if (targetDistance > carInfrontDistance && 0f <= carInfrontDistance && carInfrontDistance <= carDistance) return 1f;
-
-        if (currentTarget.stop || currentTarget.slow)
-        {
-            stopRatio = Math.Min(CalculateStopRatio(carInfrontRelativeVelocity, carInfrontDistance - carDistance, dotProduct), CalculateStopRatio(forwardVelocity, targetDistance - stopDistance, dotProduct));
-        }
-        else if (carInfront != null)
-        {
-            stopRatio = CalculateStopRatio(carInfrontRelativeVelocity, carInfrontDistance - carDistance, dotProduct);
-        }
-        else
-        {
-            stopRatio = 1f;
-        }
-
-        return stopRatio;
-    }
-
-    private float CalculateStopRatio(float s, float d, float dotProduct)
-    {
-        if (dotProduct < 0) return -1f;
-
-        float ratio = 1 - (s / d);
-        if (ratio >= 0)
-        {
-            return ratio;
-        }
-        else if (ratio <= -1)
-        {
-            return 0;
-        }
-        else
-        {
-            return (float) Math.Pow(1f + ratio, 2f);
-        }
-    }
-
-
     public override void OnActionReceived(ActionBuffers actions)
     {
+        // Store the actions given by the neural network
         steer = actions.ContinuousActions[0];
         accelerate = actions.ContinuousActions[1];
+        // Only accept braking above 0.5 to avoid small handbrake values to hinder progress
         brake = actions.ContinuousActions[2] >= 0.5f ? actions.ContinuousActions[2] : 0;
 
         // Drive
         carController.Move(steer, accelerate, accelerate, brake);
 
-        // UPDATE VALUES
+        // Update target values
         currentTarget = environmentController.currentTarget;
 
         directionToTarget = new(currentTarget.x - transform.position.x, currentTarget.z - transform.position.z);
@@ -387,9 +299,7 @@ public class CarAgent : Agent
 
         float currentReward = 0f;
 
-        // Get reward
-
-        // Episode reset conditions turned off when applying the brain model
+        // Episode reset conditions disabled when applying the model
 /*        if (collided)
         {
             AddReward(crashReward);
@@ -418,6 +328,7 @@ public class CarAgent : Agent
         }
 */
 
+        // If the agent rewached a target add the target reward and reset the time
         if (environmentController.CheckReachedTarget())
         {
             reachedTarget = true;
@@ -429,10 +340,12 @@ public class CarAgent : Agent
         }
 
         currentReward += CalculateReward();
-        //Debug.Log(GetCumulativeReward());
         
+        // Add the reward
+        // Ignore first 10 steps where the car is reseting in the environment
         if (StepCount > 10) AddReward(currentReward);
 
+        // If the agent reaches the end add a big reward and end the episode then reset the environment cars
         if (environmentController.finished)
         {
             AddReward(50f);
@@ -443,32 +356,35 @@ public class CarAgent : Agent
 
     }
 
-    public override void CollectObservations(VectorSensor sensor) 
+    // Collect observations from the environment
+    public override void CollectObservations(VectorSensor sensor)
     {
+        // Get the next target position and calculate direction and angle to it
         nextTarget = environmentController.nextTarget;
-
         directionToNextTarget = new(nextTarget.x - transform.position.x, nextTarget.z - transform.position.z);
         nextTargetAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToNextTarget);
         nextTargetAngle = Mathf.Repeat(nextTargetAngle + 180f, 360f) - 180f;
         nextTargetDistance = Vector2.Distance(new(transform.position.x, transform.position.z), new(nextTarget.x, nextTarget.z));
 
+        // Get the next stop position and calculate direction and angle to it
         nextStop = environmentController.nextStop;
-
         directionToNextStop = new(nextStop.x - transform.position.x, nextStop.z - transform.position.z);
         nextStopAngle = Vector2.SignedAngle(new(transform.forward.x, transform.forward.z), directionToNextStop);
         nextStopAngle = Mathf.Repeat(nextStopAngle + 180f, 360f) - 180f;
         nextStopDistance = Vector2.Distance(new(transform.position.x, transform.position.z), new(nextStop.x, nextStop.z));
 
+        // Create vectors to store target information
         Vector2 target1Info = new(targetAngle, targetDistance);
         Vector2 target2Info = new(nextTargetAngle, nextTargetDistance);
         Vector2 nextStopInfo = new(nextStopAngle, nextStopDistance);
 
+        // Find the nearest vehicle in front
         carInfront = environmentController.FindNearestVehicleInfront();
-
         float carInfrontAngle = 0f;
         carInfrontDistance = 100f;
         carInfrontRelativeVelocity = 0f;
 
+        // Calculate angle and distance to the nearest vehicle in front
         if (carInfront != null)
         {
             Vector2 carInfrontDirection = new(carInfront.transform.position.x - transform.position.x, carInfront.transform.position.z - transform.position.z);
@@ -479,6 +395,7 @@ public class CarAgent : Agent
             carInfrontRelativeVelocity = environmentController.CalculateRelativeSpeedTowards(carInfront.GetComponent<Rigidbody>());
         }
 
+        // Add observations to the sensor
         sensor.AddObservation(target1Info);
         sensor.AddObservation(target2Info);
         sensor.AddObservation(nextStopInfo);
@@ -490,7 +407,6 @@ public class CarAgent : Agent
         sensor.AddObservation(carInfrontAngle);
         sensor.AddObservation(carInfrontDistance);
         sensor.AddObservation(carInfrontRelativeVelocity);
-
     }
 
     private void OnTriggerStay(Collider other) {
@@ -508,9 +424,6 @@ public class CarAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut) {
         // This function is used to test the agent manually in the Unity Editor.
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
-        //continuousActions[0] = CrossPlatformInputManager.GetAxis("Horizontal");
-        //continuousActions[1] = CrossPlatformInputManager.GetAxis("Vertical");
-        //continuousActions[2] = CrossPlatformInputManager.GetAxis("Jump");
 
         continuousActions[0] = Input.GetAxis("Horizontal");
         continuousActions[1] = Input.GetAxis("Vertical");

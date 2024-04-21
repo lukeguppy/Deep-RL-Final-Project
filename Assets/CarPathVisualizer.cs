@@ -28,9 +28,14 @@ public class CarPathVisualizer : MonoBehaviour
         }
     }
 
+
+    // Create a sphere to visualize the car's path
     void CreatePathSphere()
     {
+        // Calculate the speed ratio based on the car's current speed
         float speedRatio = (0.15f * gameObject.GetComponent<CarController>().MaxSpeed + 2.5f * gameObject.GetComponent<CarController>().CurrentSpeed) / gameObject.GetComponent<CarController>().MaxSpeed;
+
+        // Create a new sphere
         if (currentSphere == null)
         {
             currentSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);

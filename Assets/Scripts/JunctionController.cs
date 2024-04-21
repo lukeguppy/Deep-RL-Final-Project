@@ -4,8 +4,10 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// Class for controlling junction behavior
 public class JunctionController : MonoBehaviour
 {
+    // Serialized fields for stop points, active times, and materials
     [SerializeField]
     private Target[] stopPoints = null;
     [SerializeField]
@@ -15,8 +17,8 @@ public class JunctionController : MonoBehaviour
     [SerializeField]
     private bool showStopPoints = true;
 
+    // Variables for tracking active status and time
     public int active = 0;
-
     private float time;
     private int currentGo;
     private int totalActiveOrWaiting = 0;
@@ -29,6 +31,7 @@ public class JunctionController : MonoBehaviour
         time = 0;
         currentGo = 0;
 
+        // Show or hide lights
         for (int i = 0; i < stopPoints.Length; i++)
         {
             stopPoints[i].GetComponent<MeshRenderer>().enabled = showStopPoints;
@@ -38,12 +41,15 @@ public class JunctionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Use the desired traffic light behaviour
+
         //AlwaysGo();
         TimedLights();
     }
 
     private void AlwaysGo()
     {
+        // Set all stop points to go state (For agent training without lights)
         if (!started)
         {
             for (int i = 0; i < stopPoints.Length; i++)
@@ -61,12 +67,13 @@ public class JunctionController : MonoBehaviour
     {
         if (!started)
         {
+            // Initialise the first light as green and the rest as red
             stopPoints[0].stop = false;
             for (int i = 1; i < stopPoints.Length; i++) stopPoints[i].stop = true;
             started = true;
         }
 
-        
+        // Update the traffic light colours and sum the active counts
         for (int i = 0; i < stopPoints.Length; i++)
         {
             Target current = stopPoints[i];
@@ -79,14 +86,17 @@ public class JunctionController : MonoBehaviour
             active += current.active;
         }
 
+        // Update the current traffic light and time
         Target currentStop = stopPoints[currentGo];
         time += Time.deltaTime;
 
+        // If the time exceeds the designated active time change to amber
         if (time > activeTimes[currentGo])
         {
             currentStop.slow = true;
         }
 
+        // If the time exceeds the amber threshold change to red and switch to the next light
         //if (currentStop.waiting == 0 || time > activeTimes[currentGo] + 1.5f)
         if (time > activeTimes[currentGo] + 1.5f)
         {

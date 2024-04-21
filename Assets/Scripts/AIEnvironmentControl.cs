@@ -7,40 +7,31 @@ using UnityStandardAssets.Vehicles.Car;
 
 public class AIEnvironmentControl : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody rb;
-    [SerializeField]
-    private float viewAngle = 45f;
-    [SerializeField]
-    private float xOffset, zOffset;
-    [SerializeField]
-    CarController carController;
-    [SerializeField]
-    private List<Target> path = null;
-    [SerializeField]
-    private float arriveDistance = 1.5f;
-    [SerializeField]
-    bool showCenterLine, showTarget = false;
-    [SerializeField]
-    private int startIndex = 0;
-    [SerializeField]
-    private bool showNextStop, showNextFinish, showCarDetection;
+    [SerializeField] private Rigidbody rb; // Reference to the Rigidbody component
+    [SerializeField] private float viewAngle = 45f; // Field of view angle for detecting other cars
+    [SerializeField] private float xOffset, zOffset; // Offset values for positioning the car
+    [SerializeField] CarController carController; // Reference to the CarController component
+    [SerializeField] private List<Target> path = null; // List of targets representing the path
+    [SerializeField] private float arriveDistance = 1.5f; // Distance threshold for arriving at a target
+    [SerializeField] bool showCenterLine; // Flag to toggle visualization of center line
+    [SerializeField] bool showTarget = false; // Flag to toggle visualization of target points
+    [SerializeField] private int startIndex = 0; // Index of the start target
+    [SerializeField] private bool showNextStop, showNextFinish, showCarDetection; // Flags to toggle visualization of next stop and finish points
 
-    private GameObject[] otherCars;
+    private GameObject[] otherCars; // Array to store references to other cars
+    public int index = 0; // Index of the current target
+    private Target activeStop; // Reference to active stop point
+    private Target activeFinish; // Reference to active finish point
+    private bool started = false; // Flag to track initialization
+    private bool reachedTarget = false; // Flag to indicate if the car has reached the target
 
-    public int index = 0;
-    private Target activeStop;
-    private Target activeFinish;
-    private bool started = false;
-    private bool reachedTarget = false;
+    public bool finished = false; // Flag to indicate if the car has finished the path
+    public float currentSpeed = 0; // Current speed of the car
+    public Target currentTarget; // Reference to the current target point
+    public Target nextTarget; // Reference to the next target point
+    public Target nextStop; // Reference to the next stop point
 
-    public bool finished = false;
-    public float currentSpeed = 0;
-    public Target currentTarget;
-    public Target nextTarget;
-    public Target nextStop;
-
-    public LineRenderer lineRenderer;
+    public LineRenderer lineRenderer; // Reference to the LineRenderer component
 
 
     private void Start()
@@ -50,6 +41,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void Setup()
     {
+        // Destroy the object if the path is empty
         if (path.Count == 0)
         {
             Destroy(gameObject);
@@ -61,7 +53,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
         rb.velocity = rb.angularVelocity = Vector3.zero;
 
-        // Start the car at a random target location
+        // Start the car at initial target location
         transform.position = path[index].GetCoords() + new Vector3(xOffset, 0.5f, zOffset);
 
         // Calculate the direction to the next target
@@ -73,21 +65,17 @@ public class AIEnvironmentControl : MonoBehaviour
         // Apply the rotation around the Y-axis to face the next target
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
-        // Get the new forward vector based on the rotation
-        Vector3 newForwardDirection = transform.forward;
-
-        // Update the forward vector of the object
-        transform.forward = newForwardDirection;
-
+        // Set current and next target points
         currentTarget = path[index];
         nextTarget = path[(index + 1) % path.Count];
         currentTarget.GetComponent<MeshRenderer>().enabled = showTarget;
 
+        // Update next stop point (traffic light)
         if (nextStop != null) nextStop.waiting = (int)MathF.Max(0, nextStop.waiting - 1);
         nextStop = GetNextStop();
-
         nextStop.waiting++;
 
+        // Update active finish point
         activeFinish = GetActiveFinish();
         activeFinish.active++;
     }
@@ -115,6 +103,7 @@ public class AIEnvironmentControl : MonoBehaviour
             started = true;
         }
 
+        // Visualise target direction if enabled
         if (showTarget && currentTarget != null)
         {
             Vector3 targetRelativeDirection = currentTarget.GetCoords() - transform.position;
@@ -125,6 +114,7 @@ public class AIEnvironmentControl : MonoBehaviour
             Debug.DrawRay(transform.position + new Vector3(0, 0.5f, 0), targetRelativeDirection.normalized * distanceToTarget, new Color(0, 0, 1f));
         }
 
+        // Check if the car has arrived at the target
         CheckIfArrived();
     }
 
@@ -141,6 +131,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private void ResetTargets()
     {
+        // Reset active stop and finish points
         if (activeStop != null)
         {
             activeStop.active = (int)MathF.Max(0, activeStop.active - 1);
@@ -198,8 +189,10 @@ public class AIEnvironmentControl : MonoBehaviour
         if (!currentTarget.stop
             && Vector3.Distance(currentTarget.GetCoords(), transform.position) < arriveDistance)
         {
+            // Arrived at a target within the threshold and the target isn't a red light
             if (currentTarget.stopPoint)
             {
+                // Handle arriving at a traffic light
                 activeStop = currentTarget;
                 activeStop.waiting = (int)MathF.Max(0, activeStop.waiting - 1);
                 activeStop.active++;
@@ -210,11 +203,13 @@ public class AIEnvironmentControl : MonoBehaviour
 
             if (currentTarget.finishedPoint && activeStop != null)
             {
+                // Handle arriving at a finished point
                 activeStop.active = (int)MathF.Max(0, activeStop.active - 1);
                 activeStop = null;
                 nextStop.waiting++;
             }
 
+            // Move to the next target
             currentTarget.GetComponent<MeshRenderer>().enabled = false;
             reachedTarget = true;
             SetNextTargetIndex();
@@ -245,6 +240,7 @@ public class AIEnvironmentControl : MonoBehaviour
 
     public Target GetNextStop()
     {
+        // Gets the next traffic light point cycling through the targets in the path
         for (int i = index; i < path.Count + index + 1; i++)
         {
             int current = i % path.Count;
@@ -255,6 +251,7 @@ public class AIEnvironmentControl : MonoBehaviour
       
     private Target GetNextFinish()
     {
+        // Gets the next finish point cycling through the targets in the path
         for (int i = index; i < path.Count + index; i++)
         {
             int current = i % path.Count;
@@ -265,8 +262,12 @@ public class AIEnvironmentControl : MonoBehaviour
 
     private Target GetActiveFinish()
     {
+        // Gets the current finish point cycling through the targets in the path
         for (int i = 0; i < path.Count; i++)
         {
+            // Cycle through the targets backwards:
+            // - if a finish point is reached it is used
+            // - if a traffic light is reached before a finish point we use the next finish point (car is active in a junction)
             int current = (path.Count + index - 1 - i) % path.Count;
             if (path[current].finishedPoint) return path[current];
             if (path[current].stopPoint) return GetNextFinish();

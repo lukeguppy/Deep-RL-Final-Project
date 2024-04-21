@@ -17,19 +17,11 @@ public class Target : MonoBehaviour
 
     void Start()
     {
-        // Set initial values based on the sphere's transform
         SetCoordinatesFromTransform();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // You can add additional logic here if needed
     }
 
     public void ForceStart()
     {
-        // Set initial values based on the sphere's transform
         Start();
     }
 
@@ -38,7 +30,6 @@ public class Target : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
-    // Set the coordinates based on the sphere's transform
     public void SetCoordinatesFromTransform()
     {
         x = transform.position.x;
