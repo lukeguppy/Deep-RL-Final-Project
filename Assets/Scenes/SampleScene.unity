@@ -7404,12 +7404,12 @@ GameObject:
   - component: {fileID: 427435823}
   - component: {fileID: 427435826}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Top Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &427435823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8283,7 +8283,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 164942377}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78041879f61fcfa4780a66d085e0181d, type: 3}
   m_Name: 
@@ -21178,7 +21178,7 @@ PrefabInstance:
     - target: {fileID: 3581184136390756080, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5461884396260738408, guid: 2d388afeceb04d44881004986d2a7de9,
         type: 3}
